@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10241f">
+  <meta name="description" content="以程度診斷、循序課程與手牌複盤，建立個人化的德州撲克現金桌學習路徑。">
+  <title>現金桌學習路徑</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17231f;
+      --muted: #66736d;
+      --paper: #f4f4ed;
+      --card: #fffefa;
+      --line: #dfe4d9;
+      --green: #205c46;
+      --green-2: #dcebe1;
+      --lime: #c7e47b;
+      --orange: #bb643d;
+      --shadow: 0 18px 50px rgba(24, 43, 35, .08);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); line-height: 1.65; }
+    button, input, textarea { font: inherit; }
+    button { cursor: pointer; }
+    a { color: var(--green); }
+    .shell { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    .topbar { padding: 24px 0 12px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 11px; color: var(--ink); text-decoration: none; font-weight: 800; letter-spacing: -.03em; }
+    .brand-mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 12px; background: var(--green); color: white; font-size: 21px; }
+    .eyebrow { color: var(--green); font-size: .75rem; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; }
+    .local-tag { padding: 6px 10px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); font-size: .76rem; }
+    .hero { position: relative; overflow: hidden; border-radius: 26px; padding: clamp(28px, 6vw, 68px); color: #f8faef; background: #10241f; box-shadow: var(--shadow); }
+    .hero::after { content: "♠"; position: absolute; right: 5%; top: -35%; font: 500 clamp(230px, 34vw, 430px)/1 Georgia, serif; color: rgba(199, 228, 123, .07); transform: rotate(-13deg); pointer-events: none; }
+    .hero-inner { position: relative; z-index: 1; max-width: 720px; }
+    .hero .eyebrow { color: var(--lime); }
+    h1 { max-width: 700px; margin: 14px 0 16px; font-size: clamp(2.35rem, 6vw, 4.75rem); line-height: 1.05; letter-spacing: -.065em; }
+    .hero p { max-width: 600px; color: #d7e2d9; font-size: 1.03rem; margin: 0; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 28px; }
+    .button { border: 0; border-radius: 11px; padding: 11px 16px; background: var(--lime); color: #19261e; font-weight: 800; text-decoration: none; transition: transform .15s, background .15s; }
+    .button:hover { transform: translateY(-1px); background: #d6ee98; }
+    .button.secondary { color: #f6f7ef; background: transparent; border: 1px solid rgba(255,255,255,.3); }
+    .notice { margin: 18px 0 0; padding: 14px 17px; border: 1px solid #ead8ba; border-radius: 13px; background: #fff7e9; color: #66441f; font-size: .91rem; }
+    .notice strong { color: #563715; }
+    .dashboard { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(260px, .8fr); gap: 16px; margin: 20px 0 28px; }
+    .panel, .module-card, .tool-card { border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: 0 5px 20px rgba(24,43,35,.035); }
+    .panel { padding: 20px 22px; }
+    .panel h2, .section-heading h2 { margin: 0; letter-spacing: -.04em; }
+    .panel p { margin: 5px 0 14px; color: var(--muted); font-size: .9rem; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .82rem; }
+    .progress-track { height: 9px; margin: 8px 0; background: #e8ede4; border-radius: 99px; overflow: hidden; }
+    .progress-fill { width: 0; height: 100%; background: var(--green); border-radius: inherit; transition: width .3s ease; }
+    .next-step { padding: 18px 20px; color: #f7f8ef; background: var(--green); border-radius: 18px; }
+    .next-step .eyebrow { color: var(--lime); }
+    .next-step h2 { margin: 5px 0; font-size: 1.2rem; }
+    .next-step p { margin: 4px 0 12px; color: #dce8df; font-size: .88rem; }
+    .text-button { padding: 0; border: 0; color: var(--lime); background: none; font-weight: 800; }
+    .tabs { position: sticky; top: 0; z-index: 10; display: flex; gap: 7px; overflow-x: auto; padding: 10px; margin: 0 0 25px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,254,250,.94); backdrop-filter: blur(14px); }
+    .tab { flex: 0 0 auto; border: 0; border-radius: 10px; padding: 9px 14px; color: var(--muted); background: transparent; font-size: .9rem; font-weight: 750; }
+    .tab[aria-selected="true"] { background: var(--green-2); color: var(--green); }
+    .view { display: none; padding-bottom: 60px; }
+    .view.active { display: block; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 0 0 18px; }
+    .section-heading p { margin: 5px 0 0; color: var(--muted); }
+    .assumption { padding: 7px 10px; border-radius: 8px; background: #e9eee5; color: var(--muted); font-size: .77rem; white-space: nowrap; }
+    .path-note { margin-bottom: 18px; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 0 12px 12px 0; background: #eaf1e9; color: #304d3d; font-size: .9rem; }
+    .module-list { display: grid; gap: 12px; }
+    .module-card { overflow: hidden; }
+    .module-summary { display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 13px; padding: 17px 19px; cursor: pointer; list-style: none; }
+    .module-summary::-webkit-details-marker { display: none; }
+    .module-number { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; color: var(--green); background: var(--green-2); font-weight: 850; }
+    .module-title { font-weight: 850; letter-spacing: -.02em; }
+    .module-subtitle { margin-top: 1px; color: var(--muted); font-size: .83rem; }
+    .module-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .78rem; }
+    .done-check { border: 1px solid var(--line); border-radius: 99px; padding: 5px 9px; background: white; color: var(--muted); font-size: .76rem; font-weight: 750; }
+    .done-check[aria-pressed="true"] { border-color: #b8d5c0; background: var(--green-2); color: var(--green); }
+    .module-body { padding: 0 24px 22px 74px; border-top: 1px solid #edf0e9; }
+    .module-body h3 { margin: 18px 0 5px; font-size: 1rem; }
+    .module-body p, .module-body li { color: #48564e; font-size: .92rem; }
+    .module-body ul { margin: 5px 0; padding-left: 20px; }
+    .example { margin: 13px 0; padding: 14px 16px; border-radius: 12px; background: #f2f4ed; font-size: .89rem; }
+    .example strong { color: var(--green); }
+    .rule { display: inline-block; margin: 4px 4px 0 0; padding: 3px 8px; border-radius: 99px; background: #f7eadc; color: #84502e; font-size: .75rem; font-weight: 750; }
+    .diagnostic-intro { max-width: 820px; color: var(--muted); }
+    .quiz-list { display: grid; gap: 12px; margin: 20px 0; }
+    .question { padding: 18px 20px; border: 1px solid var(--line); border-radius: 15px; background: var(--card); }
+    .question legend { width: 100%; padding: 0; font-weight: 800; }
+    .question .context { margin: 5px 0 10px; color: var(--muted); font-size: .88rem; }
+    .choice { display: flex; align-items: flex-start; gap: 9px; margin: 8px 0; color: #344239; font-size: .91rem; }
+    .choice input { margin-top: 6px; accent-color: var(--green); }
+    .quiz-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; }
+    .button.dark { background: var(--green); color: #fff; }
+    .quiz-result { display: none; margin-top: 18px; padding: 20px; border-radius: 16px; background: #e8f0e7; }
+    .quiz-result.show { display: block; }
+    .quiz-result h3 { margin: 0 0 5px; }
+    .quiz-result p { margin: 6px 0; }
+    .dimension-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(150px,1fr)); gap: 9px; margin: 14px 0; }
+    .dimension { padding: 10px; border-radius: 10px; background: rgba(255,255,255,.65); font-size: .82rem; }
+    .dimension strong { display: block; color: var(--green); }
+    .tool-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .tool-card { padding: 20px; }
+    .tool-card h3 { margin: 0; letter-spacing: -.02em; }
+    .tool-card p { color: var(--muted); font-size: .9rem; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    label.field { display: block; color: #47554c; font-size: .84rem; font-weight: 700; }
+    .field input, .tool-card textarea { width: 100%; margin-top: 5px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: white; color: var(--ink); }
+    .tool-card textarea { min-height: 155px; resize: vertical; }
+    .calc-result { min-height: 28px; margin-top: 9px; color: var(--green); font-weight: 850; }
+    .small-button { margin-top: 9px; padding: 8px 12px; border: 0; border-radius: 9px; color: white; background: var(--green); font-weight: 750; }
+    .footer { padding: 22px 0 34px; color: var(--muted); font-size: .8rem; border-top: 1px solid var(--line); }
+    .footer strong { color: var(--ink); }
+    @media (max-width: 760px) {
+      .dashboard { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .assumption { display: inline-block; margin-top: 10px; }
+      .tool-grid { grid-template-columns: 1fr; }
+      .module-summary { grid-template-columns: 38px 1fr; }
+      .module-meta { grid-column: 2; }
+      .module-body { padding: 0 18px 20px; }
+      .local-tag { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#top"><span class="brand-mark">♣</span><span>桌邊筆記 <span style="font-weight:500;color:var(--muted)">/ 現金桌</span></span></a>
+      <span class="local-tag">進度保存在這台裝置</span>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-inner">
+          <div class="eyebrow">NLHE · Cash game study path</div>
+          <h1>把每一手牌<br>拆成好決策。</h1>
+          <p>先診斷，再補最影響 EV 的洞。從位置與翻前範圍，走到翻後計畫、河牌價值下注與可重複的複盤流程。</p>
+          <div class="hero-actions">
+            <button class="button" data-go="diagnostic">開始程度診斷　↗</button>
+            <button class="button secondary" data-go="curriculum">查看學習地圖</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="notice"><strong>教材待補：</strong>目前專案沒有現金桌教材檔案，這版先按常見的 6-max NLHE、約 100bb 有效籌碼做基礎課程；教材章節與頁碼尚未核對。完成診斷後才會知道你的實際強弱項。</div>
+
+      <section class="dashboard" aria-label="學習進度">
+        <div class="panel">
+          <h2>你的學習進度</h2>
+          <p id="progress-copy">先做 8 題診斷，系統會依答題弱點排出優先單元。</p>
+          <div class="progress-meta"><span id="progress-label">課程進度</span><span id="progress-count">0 / 10 單元</span></div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        </div>
+        <div class="next-step">
+          <div class="eyebrow">建議下一步</div>
+          <h2 id="next-title">先找出起點</h2>
+          <p id="next-copy">答完程度診斷後，會依薄弱主題調整順序。</p>
+          <button class="text-button" data-go="diagnostic">進入診斷 →</button>
+        </div>
+      </section>
+
+      <nav class="tabs" role="tablist" aria-label="課程區域">
+        <button class="tab" role="tab" aria-selected="true" data-view="curriculum">學習地圖</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="diagnostic">程度診斷</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="tools">計算與複盤</button>
+      </nav>
+
+      <section class="view active" id="curriculum" role="tabpanel">
+        <div class="section-heading">
+          <div><div class="eyebrow">The roadmap</div><h2>從決策基礎到穩定複盤</h2><p>依診斷結果排序；牌桌上以「每次決策的期望值」為核心。</p></div>
+          <span class="assumption">課程假設：6-max NLHE · 約 100bb</span>
+        </div>
+        <div class="path-note" id="path-note"><strong>暫定順序：</strong>尚未診斷，先由單元 1 開始。完成測驗後會將低分主題移到前面；高分代表可以先略讀，不代表已能在牌桌穩定執行。</div>
+        <div class="module-list" id="module-list"></div>
+      </section>
+
+      <section class="view" id="diagnostic" role="tabpanel">
+        <div class="section-heading"><div><div class="eyebrow">Starting point</div><h2>程度診斷</h2><p class="diagnostic-intro">選最符合你目前想法的答案。可選「不確定」；答錯比猜對更能顯示下一步該補什麼。這是學習診斷，不是對牌技或長期勝率的證明。</p></div></div>
+        <form id="quiz-form">
+          <div class="quiz-list" id="quiz-list"></div>
+          <div class="quiz-actions"><button class="button dark" type="submit">看診斷結果並排序課程</button><button class="small-button" type="button" id="reset-quiz">清除答案</button></div>
+        </form>
+        <div class="quiz-result" id="quiz-result" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="tools" role="tabpanel">
+        <div class="section-heading"><div><div class="eyebrow">Use at the table</div><h2>計算與複盤工具</h2><p>先練會快算，再用完整情境檢查自己的假設。</p></div></div>
+        <div class="tool-grid">
+          <article class="tool-card">
+            <h3>跟注所需最低勝率</h3>
+            <p>公式：跟注金額 ÷（跟注前底池 + 對手下注 + 你的跟注）。這是假設攤牌無額外收益的底池賠率門檻。</p>
+            <div class="field-row">
+              <label class="field">對手下注前底池<input id="pot-before" type="number" min="0" step="0.1" value="100"></label>
+              <label class="field">對手下注<input id="villain-bet" type="number" min="0" step="0.1" value="50"></label>
+              <label class="field">你要跟注<input id="call-amount" type="number" min="0" step="0.1" value="50"></label>
+            </div>
+            <button class="small-button" id="calc-button" type="button">計算</button>
+            <div class="calc-result" id="calc-result" aria-live="polite">最低約 25.0% 勝率（不含抽水與隱含賠率）。</div>
+          </article>
+          <article class="tool-card">
+            <h3>手牌複盤紀錄</h3>
+            <p>保存於此瀏覽器。每手只寫可驗證的資訊，分清當時知道的事與事後看到的結果。</p>
+            <textarea id="review-notes" placeholder="日期／盲注／平台：\n位置、有效籌碼、手牌：\n翻前行動：\n翻牌／轉牌／河牌與底池：\n當下的範圍假設：\n我在每街考慮的選項與理由：\n下一次要驗證的一件事："></textarea>
+            <button class="small-button" id="save-notes" type="button">保存複盤</button>
+            <span id="save-status" style="margin-left:10px;color:var(--muted);font-size:.8rem"></span>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer"><strong>使用範圍：</strong>這份課程聚焦現金桌；不含錦標賽 ICM、泡沫或獎金跳級策略。教學例子是用來練推理的簡化模型，實際策略會隨抽水、籌碼深度、位置、玩家池與對手策略改變。診斷結果存在本機瀏覽器，不會上傳。</footer>
+  </div>
+
+  <script>
+    const modules = [
+      { id: 1, title: "把決策單位弄清楚", subtitle: "盲注、位置、有效籌碼與現金桌記帳", time: "15 分鐘", tags: ["基礎"], goal: "能用盲注與大盲注描述籌碼，並辨認一手牌的有效籌碼與行動順序。", core: ["現金桌的籌碼可按桌規兌換；每個決策應看有效籌碼（你與對手可投入的較小值）。", "六人桌位置由 UTG、HJ、CO、BTN、SB、BB 依序輪轉。越晚行動，越多資訊，翻後也越常有位置優勢。", "抽水（rake）、盲注、桌上籌碼深度會影響邊緣跟注與小額底池的回報。"], example: "1/2 桌你有 160bb、對手有 75bb：兩人單挑時有效籌碼是 75bb。後續 SPR 和最大損失都以這個數字算。", check: "每次進手前，先說出：我的位置、對手位置、有效籌碼、目前底池、我是有位置還是沒位置。" },
+      { id: 2, title: "翻前範圍與位置", subtitle: "開池、跟注、3-bet 與盲注防守", time: "25 分鐘", tags: ["翻前"], goal: "先建立可執行的開池範圍概念，避免用同一套牌在所有位置進池。", core: ["位置越晚，身後未行動玩家越少，開池範圍通常可以越寬；早位要更重視牌力與被 3-bet 後的可玩性。", "開池、跟注與 3-bet 不是只按牌力排序：也要看對手位置、尺寸、有效籌碼、盲注防守者與抽水。", "有位置的跟注較容易實現 equity；SB 沒位置且仍有 BB 在後面，需避免過多被動冷跟。", "先選一套適合常打桌型的基準範圍表，再按對手偏差調整；不要把單一 solver chart 當跨所有條件的固定答案。"], example: "CO 棄到你持 A♠8♠：BTN 與盲注都還在後面，但你的位置和同花可玩性好，通常比 UTG 用同一手牌開池更合理。具體頻率依開池尺寸與桌型查你的基準表。", check: "每個翻前動作都能回答：我在用價值、隔離弱範圍、阻止對手實現 equity，還是單純想看翻牌？" },
+      { id: 3, title: "底池賠率、勝率與 EV", subtitle: "把跟注價格換成最低 equity", time: "20 分鐘", tags: ["數學"], goal: "計算跟注門檻，並知道 equity 只是決策輸入，不等於保證贏牌。", core: ["底池賠率最低勝率 = 跟注金額 ÷ 跟注後總底池。例：底池 100，對手下注 50，你跟 50；跟注後底池 200，門檻是 25%。", "EV 是所有可能結果按機率加權後的平均籌碼結果。正 EV 行動長期較好，但單次可能輸。", "要把自己的手牌放進對手可能範圍，而不是只和一手猜測的牌比。抽水、平局、被加注、後續街道與 equity realization 都可能改變簡化答案。", "outs 估算要扣掉會讓你仍輸的髒 outs；翻牌看到河牌的『乘 4』是粗略估算，不是精確 equity。"], example: "底池 100，對手下注 50，你面對 50 的跟注：最低攤牌 equity = 50 ÷ (100 + 50 + 50) = 25%。若估計對手範圍下你的 equity 為 28%，還需看抽水與未來街道是否能實現這個 equity。", check: "說出你的 equity 門檻、對手範圍，以及估計依據；不要只說『我有很多 outs』。" },
+      { id: 4, title: "有效籌碼與 SPR", subtitle: "決定一對牌值多少街道", time: "20 分鐘", tags: ["翻後"], goal: "用 SPR 估計翻後剩餘籌碼與底池的比例，避免只因手牌看起來強就打光。", core: ["SPR = 翻牌開始時有效剩餘籌碼 ÷ 底池。SPR 低時較容易在一兩次下注內打光；SPR 高時需要更強的牌或更仔細的多街計畫。", "頂對強踢腳在低 SPR 通常更容易打大底池；高 SPR 面對大阻力時，牌力與對手範圍更關鍵。", "SPR 是規劃工具，不是自動跟注或棄牌規則。位置、牌面、對手和下注路線仍會改變決策。"], example: "翻牌底池 40bb、雙方剩 80bb，SPR=2。若你是單挑加注者、牌面乾燥且持頂對強踢腳，可較早規劃多街取值；若面對緊玩家在濕牌面加大壓力，仍要重估其範圍。", check: "翻牌前先問：若翻牌中牌，我願意用這手牌打幾街？SPR 是否讓我過度承諾？" },
+      { id: 5, title: "牌面、範圍與持續下注", subtitle: "看誰的整體範圍佔優", time: "25 分鐘", tags: ["翻後"], goal: "用整體範圍而非單手牌，選擇下注、過牌與下注尺寸。", core: ["範圍優勢表示一方整體牌力分布較強；堅果優勢表示一方擁有更多最強組合。兩者相關但不同。", "高牌、乾燥牌面常讓翻前加注者有範圍優勢；低張、連接、同花牌面可能更有利於盲注防守者。要按實際翻前範圍判斷。", "小尺寸可用於範圍優勢明顯、想讓弱牌付費或保護全範圍的牌面；濕牌面和強價值牌可能需要較大尺寸。", "持續下注前想好被跟注後的轉牌：哪些牌繼續價值下注、哪些牌適合放慢、哪些牌能形成有效 bluff。"], example: "BTN 開池、BB 跟注，翻牌 K♦7♣2♠：BTN 常有更多強 Kx 與超對，可考慮較小尺寸高頻下注；但若 BB 跟注範圍寬、翻牌或抽水環境特殊，頻率仍要調整。", check: "先講明你的範圍優勢在哪、對手有哪些兩對／暗三條，再決定下注頻率和尺寸。" },
+      { id: 6, title: "轉牌：延續、放慢或放棄", subtitle: "用計畫檢查第二次下注", time: "25 分鐘", tags: ["翻後"], goal: "辨認哪些轉牌改變範圍，讓你可以持續施壓或應該控池。", core: ["一張轉牌可能改善某方的堅果組合、完成聽牌、改變頂對踢腳價值，或只是空白牌。每張牌先問『改變了誰的範圍？』", "延續下注需要足夠的價值牌與可棄掉的對手牌；有 equity 的半詐唬比純空氣更有後備。", "被跟注後別自動再開火。檢查對手的跟注範圍有沒有變強、河牌有哪些可代表的價值牌。", "沒位置時多考慮過牌保護攤牌 equity；有位置時可以選擇延遲下注。"], example: "BTN 在 K-7-2 下注被 BB 跟，轉牌 8 同花補成第二種聽牌：若你的 A♠Q♠ 增加同花 equity，可比較半詐唬與免費看河牌的價值；不能只因翻牌下注過就機械式再下注。", check: "下注前寫下：比現在更好的牌會棄多少？較差牌會跟多少？哪些河牌我還要下注？" },
+      { id: 7, title: "河牌：價值下注與跟注", subtitle: "判斷較差牌會不會付錢", time: "25 分鐘", tags: ["河牌"], goal: "把價值下注、詐唬與抓詐唬分開計畫，不用『保護牌力』代替理由。", core: ["價值下注的核心問題：有多少較差牌會跟？若大多較好牌才跟，應考慮過牌或小尺寸。", "抓詐唬時比較對手的自然詐唬組合與價值組合，再看你的牌是否阻擋價值或解鎖詐唬。", "河牌無後續牌可抽，因此單純『保護』通常不成立；下注應以價值、詐唬或拒絕 equity 為清楚目的。", "底池賠率提供跟注門檻，但不能單獨證明跟注正確；必須估對手線路中的詐唬比例。"], example: "河牌底池 100，對手打 75，你跟 75：跟注後底池 250，門檻是 30%。問自己對手這條線至少有多少詐唬？若你的手牌擋住對手可能的失敗聽牌，抓詐唬可能更差。", check: "面對下注時能列出至少幾個合理價值組合和詐唬組合，再比較所需比例嗎？" },
+      { id: 8, title: "詐唬與對手調整", subtitle: "讓每條線都有可信故事", time: "25 分鐘", tags: ["範圍"], goal: "選擇有合理阻擋牌、足夠棄牌率或攤牌價值的詐唬，並針對對手偏差調整。", core: ["有效詐唬通常能讓更好的牌棄掉；理想候選牌往往攤牌價值少、阻擋對手跟注牌、又不阻擋對手棄牌牌。", "詐唬所需成功率可用風險 ÷（風險 + 可贏底池）估算，但實際 EV 還需納入被跟住時的 equity。", "對跟注過多的玩家減少低 equity 純詐唬，增加薄價值；對過度棄牌者可增加有阻擋牌的詐唬。觀察要有足夠樣本，別把一次攤牌當定論。", "對手尺寸、位置與路線都會改變其範圍；避免用『他可能在偷』當成完整理由。"], example: "河牌底池 100，下注 75 純詐唬：若被跟就輸，要讓對手棄牌超過 75 ÷ (100+75) ≈ 42.9% 才達到零 EV。若對手是明顯站站看型，這個詐唬通常不該執行。", check: "下注前說清楚：我代表哪些價值牌？目標是讓什麼更好牌棄？對手會棄掉多少？" },
+      { id: 9, title: "選桌、資金與情緒管理", subtitle: "讓好策略能長期執行", time: "15 分鐘", tags: ["實戰"], goal: "建立可持續的場次規則，避免把短期輸贏誤當牌技證據。", core: ["選桌和抽水會顯著影響期望值；選擇自己有資訊、能專注、對手弱點清楚的桌。", "為生活資金和撲克資金分帳；適合的 bankroll 緩衝取決於盲注、勝率不確定性、波動和個人承受能力，沒有一個數字適合所有人。", "事先訂好停桌條件，例如無法專注、情緒急著追回損失、或不再能解釋自己的決策。停桌不是追回輸掉籌碼的策略。", "追蹤長期樣本、盲注級別、時數與決策品質；單次結果不等於長期 EV。"], example: "連續輸兩個買入本身不證明要加注或降級。先依事先定好的資金與專注規則決定，再用牌局複盤分清壞運氣和策略漏洞。", check: "寫下進桌前的資金上限、停桌條件與本次要練的一個決策目標。" },
+      { id: 10, title: "建立每週複盤循環", subtitle: "用手牌資料決定下一個訓練題", time: "20 分鐘", tags: ["進階習慣"], goal: "把牌譜轉成可檢驗的假設，再用針對性題目反覆練習。", core: ["先記錄行動、尺寸、位置與籌碼，然後獨立寫下當時範圍假設；不要讓攤牌結果倒灌成理由。", "挑一個決策街道，列出候選動作、底池價格、對手範圍和主要不確定性。", "每週找出一個重複錯誤（例如盲注過度跟注、河牌薄價值下注不足），用 10–20 個相似情境練習。", "進階時才用 solver 驗證：對照輸入條件、看策略趨勢和敏感度，不要把一個輸出百分比背成脫離情境的答案。"], example: "複盤時隱藏對手底牌，先預測其範圍與你的最佳行動，再揭示結果。每週追蹤『我能否說清楚跟注門檻和範圍依據』，比只統計輸贏更有用。", check: "每次複盤留下『下一次可以測試的單一假設』，而不是『下次要打好一點』。" }
+    ];
+
+    const questions = [
+      { topic: "位置與翻前", module: 2, title: "為什麼 BTN 通常可以比 UTG 開更寬？", context: "以一般六人桌、盲注不變、身後玩家沒有特殊傾向為前提。", choices: ["因為 BTN 的手牌 equity 天生較高。", "因為 BTN 後續街道多數時候有位置，且身後還沒行動的人較少。", "因為 BTN 永遠不會被 3-bet。", "不確定。"], answer: 1, explain: "晚位的資訊與位置優勢提高許多牌的可玩性；仍要面對盲注防守與 3-bet。" },
+      { topic: "底池賠率", module: 3, title: "底池 100，對手下注 50，你跟 50。忽略抽水，最低需要多少攤牌勝率？", context: "假設這是河牌，不會再有後續下注。", choices: ["20%", "25%", "33%", "不確定。"], answer: 1, explain: "跟注後底池為 200，投入 50，所以門檻是 50/200 = 25%。" },
+      { topic: "SPR", module: 4, title: "翻牌底池 20bb，雙方有效剩餘 100bb。SPR 約為 5，這主要告訴你什麼？", context: "", choices: ["任何頂對都必須打光。", "後續籌碼相對底池偏深，應在翻牌前後規劃多街，不能只看一對牌力。", "對手一定有暗三條。", "不確定。"], answer: 1, explain: "SPR=100/20=5。它幫助規劃底池與剩餘籌碼比例，不直接決定某手牌必須跟或棄。" },
+      { topic: "範圍與牌面", module: 5, title: "BTN 開池、BB 跟注，翻牌 K-7-2 彩虹。合理的第一步是什麼？", context: "", choices: ["自動大注，因為翻前加注者永遠佔優。", "比較雙方翻前範圍如何命中這個牌面，再選下注頻率和尺寸。", "無論手牌都過牌，因為 BB 有位置。", "不確定。"], answer: 1, explain: "翻前加注者常在這類高牌乾燥面有範圍優勢，但仍要從實際範圍和目標推導策略。" },
+      { topic: "轉牌規劃", module: 6, title: "翻牌下注被跟後，轉牌前最值得先確認哪件事？", context: "", choices: ["不管轉牌是什麼都再下注，維持主動。", "這張牌如何改變雙方範圍、我想讓哪些牌跟或棄，以及哪些河牌會繼續。", "只看自己的牌有沒有變成一對。", "不確定。"], answer: 1, explain: "第二槍需要轉牌和範圍支持，還要先想好河牌計畫。" },
+      { topic: "河牌價值", module: 7, title: "河牌考慮薄價值下注時，最核心的問題是什麼？", context: "", choices: ["有沒有較差牌會跟我的下注？", "我的牌是不是看起來很強？", "下注能不能阻止對手抽牌？", "不確定。"], answer: 0, explain: "河牌沒有未來抽牌；價值下注主要靠較差牌跟注。" },
+      { topic: "詐唬與範圍", module: 8, title: "選純河牌詐唬時，哪類手牌通常更適合作候選？", context: "假設兩手牌攤牌價值都低，下注線也有可信價值牌。", choices: ["阻擋對手可能跟注的強牌，且保留對手可能棄牌組合的牌。", "阻擋對手會棄掉的牌，卻不阻擋跟注牌的牌。", "任何最差手牌，完全不看阻擋牌與牌面。", "不確定。"], answer: 0, explain: "好 bluff blocker 會減少對手持有跟注牌的組合，同時盡量保留可棄牌。" },
+      { topic: "複盤與結果", module: 10, title: "哪一種複盤方式比較能避免結果偏誤？", context: "", choices: ["贏的牌都照原打法重複，輸的牌都改掉。", "先隱藏對手底牌，記下當時資訊、範圍假設和候選動作，再揭示結果。", "只看一天的輸贏判斷自己的勝率。", "不確定。"], answer: 1, explain: "先按決策當時可知的資訊推理，再看攤牌，能減少結果偏誤。" }
+    ];
+
+    const stateKey = "cashStudyPath.v1";
+    let state = loadState();
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(stateKey)) || { completed: [], answers: null, notes: "" }; }
+      catch { return { completed: [], answers: null, notes: "" }; }
+    }
+    function saveState() { localStorage.setItem(stateKey, JSON.stringify(state)); }
+    function renderModules() {
+      const list = document.getElementById("module-list");
+      const order = getOrder();
+      list.innerHTML = order.map((module, index) => {
+        const done = state.completed.includes(module.id);
+        return `<details class="module-card" id="module-${module.id}">
+          <summary class="module-summary">
+            <span class="module-number">${String(index + 1).padStart(2,"0")}</span>
+            <span><span class="module-title">${module.title}</span><div class="module-subtitle">${module.subtitle}</div></span>
+            <span class="module-meta"><span>${module.time}</span><span aria-hidden="true">↗</span></span>
+          </summary>
+          <div class="module-body">
+            <h3>學完後能做到</h3><p>${module.goal}</p>
+            <h3>核心觀念</h3><ul>${module.core.map(item => `<li>${item}</li>`).join("")}</ul>
+            <div class="example"><strong>情境演練：</strong>${module.example}</div>
+            <h3>自我檢查</h3><p>${module.check}</p>
+            <div>${module.tags.map(tag => `<span class="rule">${tag}</span>`).join("")}</div>
+            <p><button class="done-check" type="button" data-complete="${module.id}" aria-pressed="${done}">${done ? "✓ 已完成" : "標記完成"}</button></p>
+          </div>
+        </details>`;
+      }).join("");
+      updateProgress();
+    }
+    function getOrder() {
+      if (!state.scores) return [...modules];
+      const scoreMap = state.scores;
+      return [...modules].sort((a,b) => {
+        const aScored = Object.hasOwn(scoreMap, a.id), bScored = Object.hasOwn(scoreMap, b.id);
+        if (aScored !== bScored) return aScored ? -1 : 1;
+        return (scoreMap[a.id] ?? 0) - (scoreMap[b.id] ?? 0) || a.id-b.id;
+      });
+    }
+    function updateProgress() {
+      const count = state.completed.length;
+      document.getElementById("progress-count").textContent = `${count} / ${modules.length} 單元`;
+      document.getElementById("progress-fill").style.width = `${count / modules.length * 100}%`;
+      if (state.scores) {
+        const weakest = getOrder()[0];
+        document.getElementById("progress-copy").textContent = "已完成診斷。依主題弱點調整了課程順序，完成單元後更新進度。";
+        document.getElementById("next-title").textContent = `先練：${weakest.title}`;
+        document.getElementById("next-copy").textContent = `依診斷結果，${weakest.subtitle} 是目前較值得優先補強的主題。`;
+        document.querySelector("#path-note").innerHTML = `<strong>依診斷排序：</strong>先處理答錯較多的主題，再回到其他模組。答題反映概念熟悉度，不足以單獨證明你在牌桌上的長期執行能力。`;
+        document.getElementById("progress-label").textContent = "課程完成度";
+      }
+    }
+    function renderQuiz() {
+      const previous = state.answers || [];
+      document.getElementById("quiz-list").innerHTML = questions.map((q, qi) => `<fieldset class="question">
+        <legend>${qi+1}. ${q.title}</legend>
+        ${q.context ? `<div class="context">${q.context}</div>` : ""}
+        ${q.choices.map((choice, ci) => `<label class="choice"><input type="radio" name="q${qi}" value="${ci}" ${previous[qi] === ci ? "checked" : ""}><span>${choice}</span></label>`).join("")}
+      </fieldset>`).join("");
+      if (state.scores) showResult(state.scores, state.totalScore);
+    }
+    function showResult(scores, total) {
+      const result = document.getElementById("quiz-result");
+      const band = total <= 3 ? "打底階段" : total <= 6 ? "建立連結階段" : "整合練習階段";
+      const summary = total <= 3 ? "先按順序補翻前、底池價格和 SPR，再進入多街策略。" : total <= 6 ? "先做答錯主題，再用翻牌後與河牌情境把數學連到範圍。" : "概念測驗表現不錯；優先做實戰複盤、反例題與條件變化，確認能穩定執行。";
+      const ranking = Object.entries(scores).map(([id, score]) => ({module: modules.find(m=>m.id===Number(id)), score})).sort((a,b)=>a.score-b.score).slice(0,4);
+      result.innerHTML = `<h3>診斷：${band} · ${total} / ${questions.length}</h3><p>${summary}</p>
+        <div class="dimension-grid">${ranking.map(item=>`<div class="dimension"><strong>${item.score ? "已答對" : "優先補強"} · 單元 ${item.module.id}</strong>${item.module.title}</div>`).join("")}</div>
+        <p><strong>建議順序：</strong>${getOrder().slice(0,5).map(m=>m.title).join(" → ")}。</p>
+        <p style="font-size:.84rem;color:var(--muted)">完整詳解已依題目附在課程概念中；這份小測只能作為起點。需要再用未見過的手牌情境檢查推理與執行。</p>`;
+      result.classList.add("show");
+    }
+    function submitQuiz(event) {
+      event.preventDefault();
+      const answers = questions.map((_, qi) => {
+        const selected = document.querySelector(`input[name="q${qi}"]:checked`);
+        return selected ? Number(selected.value) : -1;
+      });
+      if (answers.includes(-1)) {
+        document.getElementById("quiz-result").innerHTML = "<h3>還有題目未回答</h3><p>完成 8 題後，診斷才會按主題排序。</p>";
+        document.getElementById("quiz-result").classList.add("show");
+        return;
+      }
+      const scores = {};
+      questions.forEach((q,qi) => { scores[q.module] = (scores[q.module] || 0) + (answers[qi] === q.answer ? 1 : 0); });
+      const total = questions.reduce((n,q,qi)=>n+(answers[qi]===q.answer?1:0),0);
+      state.answers = answers; state.scores = scores; state.totalScore = total;
+      saveState(); renderModules(); showResult(scores,total);
+      document.getElementById("quiz-result").scrollIntoView({behavior:"smooth",block:"center"});
+    }
+    function selectView(id) {
+      document.querySelectorAll(".view").forEach(view=>view.classList.toggle("active",view.id===id));
+      document.querySelectorAll(".tab").forEach(tab=>tab.setAttribute("aria-selected",String(tab.dataset.view===id)));
+      if (location.hash !== `#${id}`) history.replaceState(null,"",`#${id}`);
+    }
+    document.addEventListener("click", event => {
+      const tab = event.target.closest("[data-view]");
+      if (tab) selectView(tab.dataset.view);
+      const go = event.target.closest("[data-go]");
+      if (go) { selectView(go.dataset.go); document.querySelector(".tabs").scrollIntoView({behavior:"smooth",block:"start"}); }
+      const done = event.target.closest("[data-complete]");
+      if (done) {
+        event.preventDefault(); event.stopPropagation();
+        const id = Number(done.dataset.complete);
+        state.completed = state.completed.includes(id) ? state.completed.filter(n=>n!==id) : [...state.completed,id];
+        saveState(); renderModules();
+        const card = document.getElementById(`module-${id}`); if(card) card.open = true;
+      }
+    });
+    document.getElementById("quiz-form").addEventListener("submit",submitQuiz);
+    document.getElementById("reset-quiz").addEventListener("click",()=>{
+      state.answers=null; state.scores=null; state.totalScore=null; saveState(); renderQuiz(); updateProgress();
+      document.getElementById("quiz-result").classList.remove("show");
+    });
+    function calculateOdds() {
+      const pot = Number(document.getElementById("pot-before").value);
+      const bet = Number(document.getElementById("villain-bet").value);
+      const call = Number(document.getElementById("call-amount").value);
+      const output = document.getElementById("calc-result");
+      if ([pot,bet,call].some(x=>!Number.isFinite(x)||x<0) || pot+bet+call===0) { output.textContent="請輸入有效的非負數金額。"; return; }
+      output.textContent = `最低約 ${(call/(pot+bet+call)*100).toFixed(1)}% 勝率（未計抽水、平局與後續街道）。`;
+    }
+    document.getElementById("calc-button").addEventListener("click",calculateOdds);
+    ["pot-before","villain-bet","call-amount"].forEach(id=>document.getElementById(id).addEventListener("input",calculateOdds));
+    const notes = document.getElementById("review-notes");
+    notes.value = state.notes || "";
+    document.getElementById("save-notes").addEventListener("click",()=>{
+      state.notes=notes.value; saveState(); document.getElementById("save-status").textContent="已存在這台裝置";
+      setTimeout(()=>document.getElementById("save-status").textContent="",2200);
+    });
+    renderModules(); renderQuiz();
+    if (["#curriculum","#diagnostic","#tools"].includes(location.hash)) selectView(location.hash.slice(1));
+  </script>
+</body>
+</html>
