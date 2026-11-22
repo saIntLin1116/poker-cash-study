@@ -74,6 +74,17 @@
     .plan-card { margin: 0; }
     .week-list { margin: 10px 0 0; padding-left: 22px; }
     .week-list li { padding: 5px 0; }
+    .week-detail { border: 1px solid var(--line); border-radius: 12px; background: #fffefa; overflow: hidden; }
+    .week-summary { cursor: pointer; padding: 12px 14px; color: var(--ink); font-size: .91rem; font-weight: 820; }
+    .week-summary::marker { color: var(--green); }
+    .week-hint { display: block; margin-top: 2px; color: var(--muted); font-size: .78rem; font-weight: 500; }
+    .week-detail[open] .week-summary { border-bottom: 1px solid var(--line); background: #f5f7f0; }
+    .week-body { padding: 10px 14px 14px; }
+    .week-body h4 { margin: 12px 0 4px; font-size: .9rem; }
+    .week-body p, .week-body li { color: #48564e; font-size: .86rem; }
+    .week-body ul { margin: 4px 0 8px; padding-left: 20px; }
+    .week-body .example { margin: 9px 0; }
+    .week-reading { padding-top: 8px; border-top: 1px solid #edf0e9; color: var(--muted) !important; }
     .reading-shelf { margin: 14px 0 26px; padding: 16px 19px; border-radius: 15px; background: #e9eee5; }
     .reading-shelf h3 { margin: 0 0 6px; }
     .reading-shelf p { margin: 6px 0; color: #48564e; font-size: .88rem; }
@@ -206,13 +217,118 @@
           <article class="plan-card">
             <div class="eyebrow">主線 · 約 8 週</div><h3>100bb 翻後決策</h3>
             <ol class="week-list">
-              <li><strong>第 1 週｜IP 優勢：</strong>練位置資訊、範圍優勢與堅果優勢；用高牌乾燥面和低張連接面比較。</li>
-              <li><strong>第 2 週｜OOP 過牌：</strong>建立含強牌、中等牌與弱牌的過牌範圍；練 check-call、check-raise 與棄牌。</li>
-              <li><strong>第 3 週｜IP check-back：</strong>練控池、保護攤牌價值、拿免費牌與延遲下注；辨認錯過價值下注的情況。</li>
-              <li><strong>第 4–5 週｜轉牌計畫：</strong>分類有利、不利與中性轉牌；決定第二槍、過牌或放棄，並先規劃河牌。</li>
-              <li><strong>第 6 週｜河牌抓詐唬：</strong>算跟注門檻、估價值與詐唬組合，再比較阻擋牌與對手傾向。</li>
-              <li><strong>第 7 週｜整合位置情境：</strong>用相同牌面比較自己在 IP 與 OOP 的策略、範圍與下注尺寸。</li>
-              <li><strong>第 8 週｜結果盲複盤：</strong>複盤至少 20 手；基礎單元 1–4 按需快速回顧，記錄重複錯誤與下一個練習題。</li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 1 週｜IP 優勢：位置帶來什麼？<span class="week-hint">位置資訊、範圍優勢與堅果優勢 · 點開教材整理與例題</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>能說明有位置（IP）為何有價值，並把「誰最後行動」和「誰的牌面更強」分開判斷。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>IP 通常在翻牌後最後行動，能先看到對手下注或過牌，再選取值、詐唬、控池或免費看下一張；這讓你更容易實現手牌 equity，也更能控制底池。</li>
+                    <li>IP 優勢不等於範圍優勢。範圍優勢是整體牌力分布較強；堅果優勢是最強牌組合較多。兩者要從翻前行動和牌面一起推導。</li>
+                    <li>後位玩家即使有位置，也可能遇到對手更有利的牌面。不能只因自己是翻前加注者，就在每個牌面持續下注。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>100bb，BTN 加注到 2.5bb，BB 跟注。K♦-7♣-2♠ 彩虹面通常讓 BTN 有更多強 Kx、超對，適合考慮小尺寸下注；若翻牌改成 8♠-7♠-6♦，BB 的 98、65、兩對與強聽牌增加，BTN 即使仍有位置也應提高過牌比例。</div>
+                  <h4>練習與過關</h4><p>選 10 個不同牌面，逐一記下位置、範圍優勢方、堅果優勢方，以及 IP 過牌能得到的好處。至少能清楚解釋 8 個牌面的差別。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何決策》的位置章、《範圍之戰》的基本範圍與組合數學、《六人桌基礎》的位置與翻前章節。以下為依教材概念重整的講義與自編案例。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 2 週｜OOP 過牌：過牌不等於弱牌<span class="week-hint">建立過牌範圍、check-call、check-raise 與棄牌</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>在沒位置（OOP）時，先建立合理的過牌範圍，再依 IP 的下注尺寸選擇跟注、加注或棄牌。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>OOP 常需先行動，因此過牌是自然的起點。過牌範圍要保留強牌、中等攤牌價值和弱牌，避免對手一看到過牌就知道你沒有強牌。</li>
+                    <li>check-call 適合有足夠勝率或可繼續改善的牌；check-raise 常由強價值牌和有後備 equity 的半詐唬組成；弱牌沒有合理跟注或加注理由時可以棄牌。</li>
+                    <li>對手小注時可能用較寬範圍延續；大注會讓跟注門檻提高，也常代表更極化的範圍。仍要結合牌面與對手下注路線，不要只按牌力分級。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>延續上週的 BTN 對 BB，翻牌 K-7-2 彩虹面，BB 先過牌。BTN 下約 1/3 池，BB 不應因為「我過牌了」就全範圍棄牌：部分 Kx、7x、口袋對與帶後門聽牌的牌可考慮跟注；強牌和合適的高 equity 聽牌則可放進加注候選。具體組合取決於翻前範圍與下注尺寸。</div>
+                  <h4>練習與過關</h4><p>挑 10 個 BB 防守翻牌，為每手牌寫下過牌後面對小注與大注的候選：跟注、加注、棄牌各有哪些代表牌，並指出哪些強牌留在跟注範圍以保護過牌線。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何讀牌》的玩家類型、範圍與翻牌讀牌；《征服現場》的翻後策略；《高級玩家》的 OOP 思考章節。以下案例為教學改寫。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 3 週｜IP check-back：何時過牌更好？<span class="week-hint">控池、保留攤牌價值、免費牌與延遲下注</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>面對 OOP 過牌時，能說清楚下注和 check-back 各自的目的；知道 check-back 是 IP 的選擇，OOP 的動作稱為 check。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>中等牌力有時透過 check-back 保留攤牌價值、避免把底池不必要地做大，也可拿免費牌實現 equity。</li>
+                    <li>下注可向較差牌取值、拒絕對手的 equity，或以半詐唬增加棄牌率。若較差牌很少跟、較好牌很少棄，下注可能不如過牌。</li>
+                    <li>check-back 範圍不能只有弱牌；在某些乾燥牌面，保留少量強牌可以防止對手看到你過牌就無限制攻擊。濕牌面則要估算免費牌讓對手改善的代價。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>BTN 持 8♠8♥，在 A♦-7♣-2♠ 彩虹面，BB 過牌。88 通常不是三街取值牌，check-back 可以控制底池並保留攤牌機會。若轉牌是 4 且 BB 再過牌，可比較小額延遲下注能否讓 7x 或口袋對跟注；若沒有較差跟注牌，就繼續過牌。</div>
+                  <h4>練習與過關</h4><p>用 15 個 IP 翻牌情境做「下注／過牌」二選一。每手寫下下注目標、較差牌會否跟、較好牌會否棄，以及過牌後你打算如何處理轉牌。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何決策》的翻牌後決策與不同牌面案例；《高級玩家》的單次加注底池 IP 玩法。本文把概念改寫成練習題。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 4 週｜讀懂轉牌：哪些牌改變了局勢？<span class="week-hint">翻牌跟注會收窄範圍；分類有利、不利與中性轉牌</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>翻牌下注被跟後，不再只看自己有沒有中牌；先估計跟注後的對手範圍，再判斷轉牌對誰有利。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>對手跟注翻牌後，範圍通常比翻前或翻牌前的起始範圍更集中在成牌、聽牌與有後門的牌；要先更新範圍，再選第二槍。</li>
+                    <li>有利轉牌可能增加你方的強牌或堅果牌；危險轉牌可能完成對手的順子／同花聽牌，或讓對手的兩對、暗三條增加；空白轉牌則沒有明顯改變。</li>
+                    <li>牌張不是絕對有利或不利；相同的 A、8 或 4，會因翻前範圍、翻牌和行動線不同而改變效果。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>BTN 開池、BB 跟注，翻牌 K-7-2 彩虹，BTN 小注、BB 跟。A 轉牌常讓 BTN 的 AK、AQ 等強牌增加，可能是較好的施壓牌；8 轉牌則會增加 BB 的 98、86 等配對／連接組合和順子聽牌，BTN 需要更謹慎。這是範圍趨勢，不代表每手牌都要下注或過牌。</div>
+                  <h4>練習與過關</h4><p>針對 5 種翻牌各列出 3 張有利、3 張不利和 3 張相對中性的轉牌；每張都用雙方翻前範圍解釋，而不是只看你的兩張手牌。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何讀牌》的轉牌讀牌與案例；《範圍之戰》的組合分析；《如何決策》的翻牌後牌例。此處案例為自編。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 5 週｜轉牌行動：第二槍、過牌或放棄<span class="week-hint">把價值、棄牌率、equity 與河牌計畫放在一起</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>選轉牌動作前先寫出下注想達到什麼，以及被跟注後哪些河牌繼續；避免「翻牌下注過，所以轉牌再打一槍」的自動化。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>價值下注：較差牌有理由跟注。詐唬：較好牌有機會棄牌。半詐唬：即使被跟仍有改善機會。過牌：保留攤牌價值、控制底池或維持過牌範圍。</li>
+                    <li>下注尺寸要和目標相配。想讓一堆中等牌繼續時，小尺寸可能夠用；牌面很濕、你有堅果優勢且想收取聽牌代價時，較大尺寸才可能合理。</li>
+                    <li>OOP 過牌後，要預先規劃面對下注的跟注／加注範圍；IP 過牌後則留意自己是否放掉太多價值或讓對手免費實現 equity。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>BTN 用 A♠5♠ 在 K♦-7♣-2♠ 翻牌下注後被 BB 跟，轉牌 4 讓 A5 有了通往順子的改善機會，但也讓 BB 的一些連接牌變強。此時不能只因自己多了 outs 就下注：先問 BB 有哪些更好的牌會棄、哪些聽牌／較差牌會跟，以及被跟後哪些河牌能繼續代表價值。</div>
+                  <h4>練習與過關</h4><p>做 12 個轉牌題，每題寫「下注目標、尺寸理由、被跟後的河牌計畫」。有一項講不清楚，就先把該手放回複盤題庫。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何決策》的多街計畫與聽牌案例；《範圍之戰》的轉牌／河牌範圍與組合；《高級玩家》的轉牌與超池下注。以原理為主，勿照抄書中舊頻率。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 6 週｜河牌抓詐唬：算門檻，再讀範圍<span class="week-hint">最低勝率、價值／詐唬組合、阻擋牌與玩家傾向</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>把「我覺得他在偷」變成可檢查的判斷：先算這手牌需要的勝率，再估下注範圍中詐唬的比例。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>河牌底池為 P，對手下注 B，你跟 B：最低勝率門檻為 B ÷ (P + 2B)。忽略平手、抽水與範圍互動時，低於門檻就是虧損跟注。</li>
+                    <li>門檻是這手牌的價格；MDF 則是整體範圍的防守概念。MDF 不是要求你用每一手 bluff-catcher 固定跟注某個比例。</li>
+                    <li>阻擋牌要看它擋住誰：擋住對手的價值牌會較適合跟；擋住對手錯失的聽牌詐唬，可能反而不利於跟注。還要看對手是否真的會用這些牌下注。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>河牌底池 100，對手下注 75，你跟 75，門檻是 75 ÷ (100+150) = 30%。若依這條線估出的下注範圍裡，約每 10 個等權重組合有 2 個詐唬，勝率約 20%，通常不足以跟；若約有 4 個詐唬，才可能超過門檻。真實組合會混合下注頻率，這只是練習估算。</div>
+                  <h4>練習與過關</h4><p>計算半池、75% 池、滿池、兩倍池的跟注門檻；再為 10 個河牌案例各列至少 3 組價值牌、3 組可能詐唬，並指出你的底牌阻擋哪一側。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《如何讀牌》的河牌範圍與下注尺寸；《範圍之戰》的組合數學與河牌；《高級玩家》的河牌／超池下注。範圍清單為重新整理，不是原書逐字內容。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 7 週｜整合與剝削：同一條線，因對手而變<span class="week-hint">比較 IP/OOP、價值線、詐唬線與玩家池偏差</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>能先提出一個穩健的基準打法，再依可觀察的對手偏差調整；不把一次攤牌當成對手的固定特性。</p>
+                  <h4>教材重點整理</h4><ul>
+                    <li>先依位置、翻前範圍、牌面與尺寸建立基準；再問對手是否過度跟注、過度棄牌、少詐唬或過度詐唬。</li>
+                    <li>對手跟注過多時，減少低 equity 的純詐唬，增加能被較差牌跟注的價值下注；對手面對大注過度棄牌時，才增加有合理阻擋牌的詐唬。</li>
+                    <li>讀牌要隨新行動更新。翻牌跟、轉牌大注、河牌過牌，每一步都會改變可能範圍，不要把翻前猜測帶到河牌不變。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>你有 20 手觀察到某對手河牌面對下注只用強牌跟、錯失聽牌又常過牌。基準上你的河牌詐唬候選可增加；若另一位玩家常用任何一對跟到底，則少做薄弱詐唬，把相同牌改成取值或過牌。樣本不足時先記錄為假設，繼續觀察。</div>
+                  <h4>練習與過關</h4><p>把同一個 BTN 對 BB 的翻牌／轉牌／河牌情境各寫兩次：一次對一般未知對手，一次對已觀察到的「過度跟注」或「少詐唬」對手。明確標出哪些行動改變、哪些不變。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《征服現場》的玩家類型與剝削；《針對性打法》的 GTO 與 exploit 調整；《如何讀牌》的範圍更新案例。對手傾向要有樣本支持。</p>
+                </div>
+              </details></li>
+              <li><details class="week-detail">
+                <summary class="week-summary">第 8 週｜結果盲複盤與 200bb 轉接<span class="week-hint">20 手複盤、弱點再測、判斷何時進入深籌碼</span></summary>
+                <div class="week-body">
+                  <h4>本週目標</h4><p>用「決策時可知的資訊」評估自己，而不是用贏牌或輸牌決定打法；完成後再把同一思路帶到 200bb。</p>
+                  <h4>複盤流程</h4><ul>
+                    <li>先隱藏對手底牌與結果，記錄有效籌碼、位置、底池、尺寸和自己的範圍假設。</li>
+                    <li>每手標記是否 IP、翻牌為何下注／過牌、check-back 在保留什麼、轉牌如何改變範圍、河牌需要多少勝率。</li>
+                    <li>再揭示結果；只把新資訊用來更新對手模型，不能把「他剛好有某手牌」當成當時唯一可能答案。</li>
+                  </ul>
+                  <div class="example"><strong>實際例子：</strong>挑一手你用 bluff-catcher 跟河牌的牌，先遮住攤牌牌力，按第 6 週列出價值／詐唬組合；再看底牌。即使輸了，只要當時估計有足夠詐唬、價格也合適，跟注仍可能是好決策；贏了也不會自動證明估算正確。</div>
+                  <h4>過關與下一步</h4><p>完成至少 20 手 100bb 結果盲複盤，其中包含 OOP 防守、IP check-back、轉牌與河牌抓詐唬。至少 16 手能寫出完整的範圍與下一街理由，再進入 200bb 主線。深籌碼時 SPR 提高、位置價值更大、單一對子更不適合自動打光；第 1–4 週的延伸路線會分別練隱含／反向隱含賠率、高 SPR、深籌碼 3-bet/4-bet 與深河牌。</p>
+                  <p class="week-reading"><strong>教材索引：</strong>《職業牌手訓練指南》的練習與複盤習慣；《哈靈頓在現金桌》的深籌碼概念；高階教材只在你先寫完自己的判斷後用來校驗。</p>
+                </div>
+              </details></li>
             </ol>
           </article>
           <article class="plan-card">
