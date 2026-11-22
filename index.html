@@ -371,7 +371,7 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       return `<h3>復盤提示（不等於 solver 結論）</h3>
         <p><strong>${escapeHtml(hand.GAME||"練習牌局")} · ${escapeHtml(hand.BLINDS||"盲注未填")} · 有效籌碼 ${escapeHtml(hand.EFFECTIVE_BB||"未填")} bb</strong></p>
         <p>${escapeHtml(hand.HERO_POSITION||"位置未填")} ${escapeHtml(hand.HERO_CARDS||"")} vs ${escapeHtml(hand.VILLAIN_POSITION||"對手位置未填")} · ${streetNames[hand.DECISION_STREET]||"決策街未填"}：${escapeHtml(hand.HERO_ACTION||"動作未填")}</p>
-        ${missing.length?`<div class="example"><strong>情境缺漏：</strong><ul>${missing.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul></div>`:"<p class="good">決策情境欄位已基本齊全；接下來核對範圍與行動理由。</p>"}
+        ${missing.length?`<div class="example"><strong>情境缺漏：</strong><ul>${missing.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul></div>`:'<p class="good">決策情境欄位已基本齊全；接下來核對範圍與行動理由。</p>'}
         ${cardWarnings.length?`<div class="example"><strong>牌面核對：</strong>${cardWarnings.map(escapeHtml).join(" ")}</div>`:""}
         ${odds?`<div class="example"><strong>底池賠率：</strong>${escapeHtml(odds)}</div>`:`<div class="example"><strong>底池賠率：</strong>若這手牌面對下注，填入下注前底池、對手下注和跟注額即可計算門檻。</div>`}
         <div class="example"><strong>可能要再檢查的地方：</strong><ul>${reasons.length?reasons.map(x=>`<li class="flag">${escapeHtml(x)}</li>`).join(""):`<li class="good">目前筆記沒有觸發明顯的理由檢查項；仍需要用對手範圍和相似情境驗證。</li>`}</ul></div>
