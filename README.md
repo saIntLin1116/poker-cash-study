@@ -15,8 +15,5 @@
 
 ## 發布到 GitHub Pages
 
-1. 將此資料夾內容放入要發布的 GitHub repository。
-2. 在 repository 的 **Settings → Pages**，選擇從 branch 發布，branch 選 `main`，資料夾選 `/(root)`。
-3. Pages 完成建置後，GitHub 會在同一頁顯示網站網址。
-
-這個資料夾目前不是 Git repository，也沒有設定遠端，因此目前交付的是可發布網站原始碼，尚未公開部署。
+1. 在 repository 的 **Settings → Pages** 選擇從 branch 發布，branch 選 `main`，資料夾選 `/(root)`。
+2. Pages 完成建置後，GitHub 會在同一頁顯示網站網址。
