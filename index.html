@@ -104,6 +104,16 @@
     .tool-card h3 { margin: 0; letter-spacing: -.02em; }
     .tool-card p { color: var(--muted); font-size: .9rem; }
     .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .hand-form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; margin-top: 15px; }
+    .hand-form .wide { grid-column: 1 / -1; }
+    .file-picker { display: block; width: 100%; margin: 10px 0; padding: 12px; border: 1px dashed #b8c6b8; border-radius: 10px; background: #f7f8f2; }
+    .privacy-note { margin: 12px 0; padding: 12px 14px; border-radius: 10px; color: #61451e; background: #fff6e7; font-size: .84rem; }
+    .analysis-output { margin-top: 16px; }
+    .analysis-output h3 { margin: 0 0 7px; }
+    .analysis-output ul { margin: 7px 0; padding-left: 20px; }
+    .analysis-output li { margin: 5px 0; }
+    .analysis-output .good { color: var(--green); }
+    .analysis-output .flag { color: #8a492e; }
     label.field { display: block; color: #47554c; font-size: .84rem; font-weight: 700; }
     .field input, .tool-card textarea { width: 100%; margin-top: 5px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 9px; background: white; color: var(--ink); }
     .tool-card textarea { min-height: 155px; resize: vertical; }
@@ -116,6 +126,8 @@
       .section-heading { display: block; }
       .assumption { display: inline-block; margin-top: 10px; }
       .tool-grid { grid-template-columns: 1fr; }
+      .hand-form { grid-template-columns: 1fr; }
+      .hand-form .wide { grid-column: auto; }
       .module-summary { grid-template-columns: 38px 1fr; }
       .module-meta { grid-column: 2; }
       .module-body { padding: 0 18px 20px; }
@@ -163,6 +175,7 @@
       <nav class="tabs" role="tablist" aria-label="課程區域">
         <button class="tab" role="tab" aria-selected="true" data-view="curriculum">學習地圖</button>
         <button class="tab" role="tab" aria-selected="false" data-view="diagnostic">程度診斷</button>
+        <button class="tab" role="tab" aria-selected="false" data-view="hand-lab">牌譜練習</button>
         <button class="tab" role="tab" aria-selected="false" data-view="tools">計算與複盤</button>
       </nav>
 
@@ -182,6 +195,71 @@
           <div class="quiz-actions"><button class="button dark" type="submit">看診斷結果並排序課程</button><button class="small-button" type="button" id="reset-quiz">清除答案</button></div>
         </form>
         <div class="quiz-result" id="quiz-result" aria-live="polite"></div>
+      </section>
+
+      <section class="view" id="hand-lab" role="tabpanel">
+        <div class="section-heading"><div><div class="eyebrow">Practice hand review</div><h2>牌譜練習室</h2><p class="diagnostic-intro">用虛構或自行創作的練習情境，整理決策條件、算跟注底池賠率，再檢查自己的推理。這是復盤提示，不是 solver 或勝率保證。</p></div></div>
+        <div class="privacy-note"><strong>使用範圍：</strong>只輸入自創／虛構練習牌譜。若你使用 GGPoker／PokerCraft，請勿匯入、改寫或貼上由 PokerCraft／牌桌歷史導出的真實牌局；平台政策禁止第三方匯入或轉換該資料，也禁止將其交給外部平台。本工具只接受下方自訂格式，檔案在本機瀏覽器讀取，不會傳到伺服器。</div>
+        <div class="tool-grid">
+          <article class="tool-card">
+            <h3>手動建立一手練習牌譜</h3>
+            <p>牌面花色用 s/h/d/c，例如 As Kd；行動欄可寫「CO open 2.5bb; BTN call」。空白欄可留白。</p>
+            <form id="hand-form" class="hand-form" autocomplete="off">
+              <label class="field">遊戲與桌型<input id="hand-game" value="NLHE 現金桌（假想練習）"></label>
+              <label class="field">盲注<input id="hand-blinds" value="0.5/1 bb"></label>
+              <label class="field">有效籌碼（bb）<input id="hand-effective" type="number" min="1" step="1" value="100"></label>
+              <label class="field">我的位置<input id="hand-hero-position" value="BTN"></label>
+              <label class="field">我的手牌<input id="hand-hero-cards" value="As Kd" placeholder="As Kd"></label>
+              <label class="field">主要對手位置<input id="hand-villain-position" value="BB"></label>
+              <label class="field">我要復盤的街道<select id="hand-street"><option value="preflop">翻前</option><option value="flop" selected>翻牌</option><option value="turn">轉牌</option><option value="river">河牌</option></select></label>
+              <label class="field">我考慮／採取的動作<input id="hand-action" placeholder="Call 6bb / Bet 12bb / Fold"></label>
+              <label class="field wide">翻前行動<input id="hand-preflop" placeholder="UTG fold; CO open 2.5bb; BTN call; BB call"></label>
+              <label class="field">翻牌（3 張）<input id="hand-flop" value="Kh 7c 2s" placeholder="Kh 7c 2s"></label>
+              <label class="field">翻牌行動<input id="hand-flop-action" placeholder="BB check; CO bet 3bb; BTN call"></label>
+              <label class="field">轉牌<input id="hand-turn" placeholder="9h"></label>
+              <label class="field">轉牌行動<input id="hand-turn-action" placeholder="BB check; CO check"></label>
+              <label class="field">河牌<input id="hand-river" placeholder="4d"></label>
+              <label class="field">河牌行動<input id="hand-river-action" placeholder="BB bet 12bb; BTN call"></label>
+              <label class="field">面對下注前底池（bb）<input id="hand-pot" type="number" min="0" step="0.1" placeholder="例如 12"></label>
+              <label class="field">對手下注（bb）<input id="hand-bet" type="number" min="0" step="0.1" placeholder="例如 6"></label>
+              <label class="field">我的跟注金額（bb）<input id="hand-call" type="number" min="0" step="0.1" placeholder="例如 6"></label>
+              <label class="field">我估計的攤牌勝率（%）<input id="hand-equity" type="number" min="0" max="100" step="0.1" placeholder="選填"></label>
+              <label class="field wide">我當時的理由<textarea id="hand-reason" placeholder="我認為對手有哪些價值牌、詐唬或較差牌？我下注想達到什麼？"></textarea></label>
+              <label class="field wide">我想弄清楚的問題<textarea id="hand-question" placeholder="例如：這個跟注是否太鬆？哪些轉牌適合繼續？"></textarea></label>
+              <div class="wide" style="display:flex;gap:8px;flex-wrap:wrap"><button class="small-button" type="submit">產生復盤提示</button><button class="small-button" type="button" id="download-hand-note">下載自訂 TXT</button><button class="small-button" type="button" id="clear-hand-form" style="background:#6b746e">清空</button></div>
+            </form>
+          </article>
+          <article class="tool-card">
+            <h3>開啟自訂 TXT 練習牌譜</h3>
+            <p>只讀取以 <code>CASH-STUDY-NOTE/1</code> 開頭的本工具自訂檔案。可先手動輸入，再下載 TXT；之後再從這裡開啟。</p>
+            <input class="file-picker" id="hand-file" type="file" accept=".txt,text/plain">
+            <div id="hand-file-status" class="calc-result" aria-live="polite"></div>
+            <div class="example"><strong>自訂 TXT 範例：</strong><pre style="white-space:pre-wrap;font-size:.78rem;line-height:1.45">CASH-STUDY-NOTE/1
+GAME=NLHE 現金桌（假想練習）
+BLINDS=0.5/1 bb
+EFFECTIVE_BB=100
+HERO_POSITION=BTN
+HERO_CARDS=As Kd
+VILLAIN_POSITION=BB
+DECISION_STREET=flop
+HERO_ACTION=Call 6bb
+PREFLOP=CO open 2.5bb; BTN call; BB call
+FLOP=Kh 7c 2s
+FLOP_ACTION=BB check; CO bet 3bb; BTN call
+TURN=9h
+TURN_ACTION=BB check; BTN check
+RIVER=
+RIVER_ACTION=
+POT_BEFORE_BET_BB=12
+VILLAIN_BET_BB=6
+HERO_CALL_BB=6
+HERO_EQUITY_PERCENT=
+HERO_REASON=我認為自己有頂對，但還沒整理對手的價值牌與詐唬組合。
+QUESTION=這個跟注需要比較哪些範圍？</pre></div>
+            <p style="font-size:.82rem;color:var(--muted)">檔案只在你的瀏覽器解析；本工具沒有牌譜伺服器，也不會把檔案送到網站後端。</p>
+          </article>
+        </div>
+        <article class="tool-card analysis-output" id="hand-analysis" aria-live="polite" hidden></article>
       </section>
 
       <section class="view" id="tools" role="tabpanel">
@@ -236,6 +314,104 @@
       { topic: "詐唬與範圍", module: 8, title: "選純河牌詐唬時，哪類手牌通常更適合作候選？", context: "假設兩手牌攤牌價值都低，下注線也有可信價值牌。", choices: ["阻擋對手可能跟注的強牌，且保留對手可能棄牌組合的牌。", "阻擋對手會棄掉的牌，卻不阻擋跟注牌的牌。", "任何最差手牌，完全不看阻擋牌與牌面。", "不確定。"], answer: 0, explain: "好 bluff blocker 會減少對手持有跟注牌的組合，同時盡量保留可棄牌。" },
       { topic: "複盤與結果", module: 10, title: "哪一種複盤方式比較能避免結果偏誤？", context: "", choices: ["贏的牌都照原打法重複，輸的牌都改掉。", "先隱藏對手底牌，記下當時資訊、範圍假設和候選動作，再揭示結果。", "只看一天的輸贏判斷自己的勝率。", "不確定。"], answer: 1, explain: "先按決策當時可知的資訊推理，再看攤牌，能減少結果偏誤。" }
     ];
+
+    const handFields = {
+      GAME:"hand-game", BLINDS:"hand-blinds", EFFECTIVE_BB:"hand-effective", HERO_POSITION:"hand-hero-position",
+      HERO_CARDS:"hand-hero-cards", VILLAIN_POSITION:"hand-villain-position", DECISION_STREET:"hand-street",
+      HERO_ACTION:"hand-action", PREFLOP:"hand-preflop", FLOP:"hand-flop", FLOP_ACTION:"hand-flop-action",
+      TURN:"hand-turn", TURN_ACTION:"hand-turn-action", RIVER:"hand-river", RIVER_ACTION:"hand-river-action",
+      POT_BEFORE_BET_BB:"hand-pot", VILLAIN_BET_BB:"hand-bet", HERO_CALL_BB:"hand-call",
+      HERO_EQUITY_PERCENT:"hand-equity", HERO_REASON:"hand-reason", QUESTION:"hand-question"
+    };
+    const streetNames = {preflop:"翻前",flop:"翻牌",turn:"轉牌",river:"河牌"};
+    function collectHand() {
+      return Object.fromEntries(Object.entries(handFields).map(([key,id]) => [key,document.getElementById(id).value.trim()]));
+    }
+    function applyHand(data) {
+      for (const [key,id] of Object.entries(handFields)) if (data[key] !== undefined) document.getElementById(id).value = data[key];
+    }
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
+    }
+    function parsedCards(value) { return (String(value||"").match(/(?:10|[2-9TJQKA])[shdc]/gi) || []).map(card=>card.toLowerCase()); }
+    function buildHandAnalysis(hand) {
+      const missing = [];
+      if (!hand.HERO_POSITION) missing.push("補上你的位置。");
+      if (!hand.HERO_CARDS) missing.push("補上你的兩張手牌，牌面格式如 As Kd。");
+      if (!hand.PREFLOP) missing.push("補上翻前行動與尺寸。");
+      if (!hand[hand.DECISION_STREET.toUpperCase()]) missing.push(`補上${streetNames[hand.DECISION_STREET]||"決策街"}牌面或說明是翻前決策。`);
+      if (!hand.HERO_ACTION) missing.push("記下你在這個決策點採取或考慮的動作。");
+      const cards = [...parsedCards(hand.HERO_CARDS),...parsedCards(hand.FLOP),...parsedCards(hand.TURN),...parsedCards(hand.RIVER)];
+      const duplicates = cards.filter((card,index)=>cards.indexOf(card)!==index);
+      const cardWarnings = duplicates.length ? [`牌面有重複的牌：${[...new Set(duplicates)].join(", ")}。請核對手牌與公共牌。`] : [];
+      const reasons = [];
+      const reason = hand.HERO_REASON.toLowerCase();
+      const action = hand.HERO_ACTION.toLowerCase();
+      if (!hand.HERO_REASON) reasons.push("還沒寫下當時的理由；先列出你預估對手的價值牌、詐唬牌與較差牌，再評估動作。 ");
+      if (!/範圍|range|組合|combo/.test(reason)) reasons.push("推理裡尚未明確列對手範圍；試著寫出哪些較好牌、較差牌和聽牌會走到這一步。");
+      if (/已經投入|捨不得|不想棄|都到這裡|想看看/.test(reason)) reasons.push("理由可能受沉沒成本或好奇心影響；從現在的底池價格與對手範圍重新決策。");
+      if (/(call|跟注)/.test(action) && [hand.POT_BEFORE_BET_BB,hand.VILLAIN_BET_BB,hand.HERO_CALL_BB].some(x=>x==="")) reasons.push("你記的是跟注，但缺少底池、對手下注或跟注額，暫時無法算底池賠率。");
+      if (/(bet|raise|下注|加注)/.test(action) && !/價值|value|詐唬|bluff|棄牌|fold/.test(reason)) reasons.push("你記的是下注或加注；補上目標：較差牌會跟、較好牌會棄，還是要讓哪些牌放棄 equity？");
+      if (hand.DECISION_STREET === "river") reasons.push("河牌沒有後續抽牌：價值下注要找較差跟注牌；抓詐唬要比較所需勝率與對手可能的詐唬組合。");
+      if (hand.DECISION_STREET === "turn" || hand.DECISION_STREET === "flop") reasons.push("翻後決策先寫好下一街計畫：哪些牌改善你的範圍、哪些牌讓你停火，以及下注後被跟時怎麼辦。");
+      let odds = "";
+      const pot = Number(hand.POT_BEFORE_BET_BB), bet = Number(hand.VILLAIN_BET_BB), call = Number(hand.HERO_CALL_BB);
+      if ([hand.POT_BEFORE_BET_BB,hand.VILLAIN_BET_BB,hand.HERO_CALL_BB].every(x=>x!=="") && pot>=0 && bet>=0 && call>0 && pot+bet+call>0) {
+        const threshold = call/(pot+bet+call)*100;
+        odds = `跟注所需最低攤牌勝率約 ${threshold.toFixed(1)}%（跟注額 ÷ 跟注後總底池）。這是假設河牌／攤牌前沒有後續下注，不含抽水與平局。`;
+        const equity = Number(hand.HERO_EQUITY_PERCENT);
+        if (hand.HERO_EQUITY_PERCENT!=="" && Number.isFinite(equity)) odds += equity>=threshold ? ` 你填的估計勝率 ${equity.toFixed(1)}% 高於門檻；下一步核對估計是否基於合理範圍。` : ` 你填的估計勝率 ${equity.toFixed(1)}% 低於門檻；檢查是否有未計入的平局、隱含賠率或估錯範圍。`;
+      }
+      const questions = [
+        "對手到此街的範圍裡，哪些組合是價值牌、詐唬牌、聽牌或較差的跟注牌？",
+        "你的動作想讓什麼更好牌棄掉，或讓什麼更差牌付錢？",
+        "下注尺寸、有效籌碼和位置如何影響你後續街道的計畫？",
+        "有沒有把單次結果或已投入籌碼當成決策理由？"
+      ];
+      return `<h3>復盤提示（不等於 solver 結論）</h3>
+        <p><strong>${escapeHtml(hand.GAME||"練習牌局")} · ${escapeHtml(hand.BLINDS||"盲注未填")} · 有效籌碼 ${escapeHtml(hand.EFFECTIVE_BB||"未填")} bb</strong></p>
+        <p>${escapeHtml(hand.HERO_POSITION||"位置未填")} ${escapeHtml(hand.HERO_CARDS||"")} vs ${escapeHtml(hand.VILLAIN_POSITION||"對手位置未填")} · ${streetNames[hand.DECISION_STREET]||"決策街未填"}：${escapeHtml(hand.HERO_ACTION||"動作未填")}</p>
+        ${missing.length?`<div class="example"><strong>情境缺漏：</strong><ul>${missing.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul></div>`:"<p class="good">決策情境欄位已基本齊全；接下來核對範圍與行動理由。</p>"}
+        ${cardWarnings.length?`<div class="example"><strong>牌面核對：</strong>${cardWarnings.map(escapeHtml).join(" ")}</div>`:""}
+        ${odds?`<div class="example"><strong>底池賠率：</strong>${escapeHtml(odds)}</div>`:`<div class="example"><strong>底池賠率：</strong>若這手牌面對下注，填入下注前底池、對手下注和跟注額即可計算門檻。</div>`}
+        <div class="example"><strong>可能要再檢查的地方：</strong><ul>${reasons.length?reasons.map(x=>`<li class="flag">${escapeHtml(x)}</li>`).join(""):`<li class="good">目前筆記沒有觸發明顯的理由檢查項；仍需要用對手範圍和相似情境驗證。</li>`}</ul></div>
+        <h3>逐街自問</h3><ul>${questions.map(x=>`<li>${escapeHtml(x)}</li>`).join("")}</ul>
+        ${hand.QUESTION?`<p><strong>你的問題：</strong>${escapeHtml(hand.QUESTION)}</p>`:""}
+        <p style="color:var(--muted);font-size:.82rem">這個提示器只檢查你輸入的情境是否完整、底池賠率與常見推理漏洞；不會自動知道未知底牌，也不會計算 GTO 頻率。</p>`;
+    }
+    function saveHandNote() {
+      const values = collectHand();
+      const rows = ["CASH-STUDY-NOTE/1",...Object.entries(values).map(([key,value])=>`${key}=${String(value).replace(/\r?\n/g," / ")}`)];
+      const blob = new Blob([rows.join("\n")+"\n"],{type:"text/plain;charset=utf-8"});
+      const link = document.createElement("a"); link.href=URL.createObjectURL(blob); link.download="cash-study-note.txt"; link.click();
+      setTimeout(()=>URL.revokeObjectURL(link.href),1000);
+    }
+    async function loadHandNote(file) {
+      const status=document.getElementById("hand-file-status");
+      if (!file) return;
+      if (file.size>100000) { status.textContent="檔案過大；請使用 100 KB 以下的自訂練習筆記。"; return; }
+      try {
+        const text=await file.text();
+        const lines=text.replace(/^\uFEFF/,"").split(/\r?\n/);
+        if (lines[0].trim()!=="CASH-STUDY-NOTE/1") throw new Error("格式不符。本工具只讀取以 CASH-STUDY-NOTE/1 開頭的自訂練習檔，不解析 PokerCraft 或其他平台匯出檔。");
+        const values={};
+        for (const line of lines.slice(1)) {
+          const separator=line.indexOf("="); if(separator<1) continue;
+          const key=line.slice(0,separator).trim(); if(Object.hasOwn(handFields,key)) values[key]=line.slice(separator+1).trim();
+        }
+        applyHand(values); status.textContent="已在本機瀏覽器開啟自訂練習檔。";
+      } catch(error) { status.textContent=error.message||"無法讀取這個 TXT 檔。"; }
+    }
+    function initializeHandLab() {
+      document.getElementById("hand-form").addEventListener("submit",event=>{
+        event.preventDefault(); const output=document.getElementById("hand-analysis"); output.innerHTML=buildHandAnalysis(collectHand()); output.hidden=false; output.scrollIntoView({behavior:"smooth",block:"nearest"});
+      });
+      document.getElementById("download-hand-note").addEventListener("click",saveHandNote);
+      document.getElementById("clear-hand-form").addEventListener("click",()=>{
+        document.getElementById("hand-form").reset(); document.getElementById("hand-file-status").textContent=""; document.getElementById("hand-analysis").hidden=true;
+      });
+      document.getElementById("hand-file").addEventListener("change",event=>loadHandNote(event.target.files?.[0]));
+    }
 
     const stateKey = "cashStudyPath.v1";
     let state = loadState();
@@ -368,7 +544,8 @@
       setTimeout(()=>document.getElementById("save-status").textContent="",2200);
     });
     renderModules(); renderQuiz();
-    if (["#curriculum","#diagnostic","#tools"].includes(location.hash)) selectView(location.hash.slice(1));
+    initializeHandLab();
+    if (["#curriculum","#diagnostic","#hand-lab","#tools"].includes(location.hash)) selectView(location.hash.slice(1));
   </script>
 </body>
 </html>
