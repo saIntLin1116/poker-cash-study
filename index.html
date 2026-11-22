@@ -66,6 +66,18 @@
     .section-heading p { margin: 5px 0 0; color: var(--muted); }
     .assumption { padding: 7px 10px; border-radius: 8px; background: #e9eee5; color: var(--muted); font-size: .77rem; white-space: nowrap; }
     .path-note { margin-bottom: 18px; padding: 14px 16px; border-left: 4px solid var(--green); border-radius: 0 12px 12px 0; background: #eaf1e9; color: #304d3d; font-size: .9rem; }
+    .learner-card, .plan-card { margin: 14px 0; padding: 19px 21px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+    .learner-card { border-left: 4px solid var(--orange); }
+    .learner-card h3, .plan-card h3 { margin: 0 0 6px; }
+    .learner-card p, .plan-card p, .plan-card li { color: #48564e; font-size: .9rem; }
+    .track-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; margin: 14px 0; }
+    .plan-card { margin: 0; }
+    .week-list { margin: 10px 0 0; padding-left: 22px; }
+    .week-list li { padding: 5px 0; }
+    .reading-shelf { margin: 14px 0 26px; padding: 16px 19px; border-radius: 15px; background: #e9eee5; }
+    .reading-shelf h3 { margin: 0 0 6px; }
+    .reading-shelf p { margin: 6px 0; color: #48564e; font-size: .88rem; }
+    .module-reading { margin-top: 12px; padding-top: 9px; border-top: 1px solid #edf0e9; color: var(--muted); font-size: .84rem; }
     .module-list { display: grid; gap: 12px; }
     .module-card { overflow: hidden; }
     .module-summary { display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 13px; padding: 17px 19px; cursor: pointer; list-style: none; }
@@ -126,6 +138,7 @@
       .section-heading { display: block; }
       .assumption { display: inline-block; margin-top: 10px; }
       .tool-grid { grid-template-columns: 1fr; }
+      .track-grid { grid-template-columns: 1fr; }
       .hand-form { grid-template-columns: 1fr; }
       .hand-form .wide { grid-column: auto; }
       .module-summary { grid-template-columns: 38px 1fr; }
@@ -155,20 +168,20 @@
         </div>
       </section>
 
-      <div class="notice"><strong>教材待補：</strong>目前專案沒有現金桌教材檔案，這版先按常見的 6-max NLHE、約 100bb 有效籌碼做基礎課程；教材章節與頁碼尚未核對。完成診斷後才會知道你的實際強弱項。</div>
+      <div class="notice"><strong>個人學習起點：</strong>基礎概念已達標，接下來主攻 100bb 翻後決策，優先補位置優勢、OOP 過牌、IP check-back、轉牌計畫與河牌抓詐唬。基礎答題表現不代表這些實戰技能已熟練。</div>
 
       <section class="dashboard" aria-label="學習進度">
         <div class="panel">
           <h2>你的學習進度</h2>
-          <p id="progress-copy">先做 8 題診斷，系統會依答題弱點排出優先單元。</p>
+          <p id="progress-copy">依你回報的弱點，先練位置與過牌，再走轉牌、河牌與 200bb 延伸課程。</p>
           <div class="progress-meta"><span id="progress-label">課程進度</span><span id="progress-count">0 / 10 單元</span></div>
           <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
         <div class="next-step">
           <div class="eyebrow">建議下一步</div>
-          <h2 id="next-title">先找出起點</h2>
-          <p id="next-copy">答完程度診斷後，會依薄弱主題調整順序。</p>
-          <button class="text-button" data-go="diagnostic">進入診斷 →</button>
+          <h2 id="next-title">先練位置與過牌</h2>
+          <p id="next-copy">從 IP/OOP 的策略差異開始，再進入 OOP 過牌與 IP check-back。</p>
+          <button class="text-button" data-go="curriculum">開始第一個優先單元 →</button>
         </div>
       </section>
 
@@ -181,10 +194,44 @@
 
       <section class="view active" id="curriculum" role="tabpanel">
         <div class="section-heading">
-          <div><div class="eyebrow">The roadmap</div><h2>從決策基礎到穩定複盤</h2><p>依診斷結果排序；牌桌上以「每次決策的期望值」為核心。</p></div>
-          <span class="assumption">課程假設：6-max NLHE · 約 100bb</span>
+          <div><div class="eyebrow">The roadmap</div><h2>你的現金桌學習路線</h2><p>先集中訓練 100bb 翻後弱點，再延伸至 200bb 深籌碼。</p></div>
+          <span class="assumption">主線：6-max NLHE · 100bb → 200bb</span>
         </div>
-        <div class="path-note" id="path-note"><strong>暫定順序：</strong>尚未診斷，先由單元 1 開始。完成測驗後會將低分主題移到前面；高分代表可以先略讀，不代表已能在牌桌穩定執行。</div>
+        <div class="path-note" id="path-note"><strong>你的優先順序：</strong>位置優勢 → OOP 翻牌過牌 → IP check-back → 轉牌計畫 → 河牌抓詐唬。基礎單元保留作快速複習；每個主題都要用牌例驗證，答題全對不等於實戰執行已穩定。</div>
+        <article class="learner-card">
+          <h3>個人診斷摘要</h3>
+          <p>依目前診斷與自評，優先補強轉牌、OOP 策略、check-back、抓詐唬頻率與 IP 優勢。課程不重複從新手概念開始，而以這五項 100bb 翻後決策為先。現在先把 100bb 練穩；200bb 可閱讀，但建議累積 20 手 100bb 複盤後，再把深籌碼策略當作牌桌主線。</p>
+        </article>
+        <div class="track-grid">
+          <article class="plan-card">
+            <div class="eyebrow">主線 · 約 8 週</div><h3>100bb 翻後決策</h3>
+            <ol class="week-list">
+              <li><strong>第 1 週｜IP 優勢：</strong>練位置資訊、範圍優勢與堅果優勢；用高牌乾燥面和低張連接面比較。</li>
+              <li><strong>第 2 週｜OOP 過牌：</strong>建立含強牌、中等牌與弱牌的過牌範圍；練 check-call、check-raise 與棄牌。</li>
+              <li><strong>第 3 週｜IP check-back：</strong>練控池、保護攤牌價值、拿免費牌與延遲下注；辨認錯過價值下注的情況。</li>
+              <li><strong>第 4–5 週｜轉牌計畫：</strong>分類有利、不利與中性轉牌；決定第二槍、過牌或放棄，並先規劃河牌。</li>
+              <li><strong>第 6 週｜河牌抓詐唬：</strong>算跟注門檻、估價值與詐唬組合，再比較阻擋牌與對手傾向。</li>
+              <li><strong>第 7 週｜整合位置情境：</strong>用相同牌面比較自己在 IP 與 OOP 的策略、範圍與下注尺寸。</li>
+              <li><strong>第 8 週｜結果盲複盤：</strong>複盤至少 20 手；基礎單元 1–4 按需快速回顧，記錄重複錯誤與下一個練習題。</li>
+            </ol>
+          </article>
+          <article class="plan-card">
+            <div class="eyebrow">延伸 · 約 4 週</div><h3>200bb 深籌碼</h3>
+            <ol class="week-list">
+              <li><strong>第 1 週｜翻前與隱含賠率：</strong>比較位置、可玩性、隱含賠率與反向隱含賠率；不把投機牌當成自動跟注。</li>
+              <li><strong>第 2 週｜高 SPR：</strong>規劃多街底池；頂對不自動打光，重視堅果牌與位置。</li>
+              <li><strong>第 3 週｜深籌碼 3-bet／4-bet：</strong>以有效籌碼、底池大小與剩餘 SPR 重估翻前和翻後範圍。</li>
+              <li><strong>第 4 週｜深河牌：</strong>練極化尺寸、超池下注、價值牌與詐唬牌組合；以 Solver 驗證趨勢，不背單一頻率。</li>
+            </ol>
+            <p><strong>進度檢核：</strong>先完成 100bb 弱點單元，能解釋 20 手牌的範圍與多街計畫，再將 200bb 策略帶到實戰。</p>
+          </article>
+        </div>
+        <div class="reading-shelf">
+          <h3>教材讀法：按主題取用，不必逐本讀完</h3>
+          <p><strong>打底與 100bb：</strong>《六人桌基礎》、《小額無限德州理論》、《哈靈頓在現金桌》；先讀位置、翻前、底池賠率、SPR 與不同籌碼深度章節。</p>
+          <p><strong>你的翻後弱點：</strong>《如何決策》、《如何讀牌》、《範圍之戰》、《征服現場》、《針對性打法》；用來補範圍推理、位置、轉牌與對手調整。</p>
+          <p><strong>200bb 與進階驗證：</strong>《無限德州分析法》、《藍皮書》、《高級概念》、《高級玩家》；先掌握概念，再用 Solver 驗證。舊書中的範圍、下注尺寸與玩家池假設需依你實際遊戲更新。</p>
+        </div>
         <div class="module-list" id="module-list"></div>
       </section>
 
@@ -296,12 +343,12 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       { id: 2, title: "翻前範圍與位置", subtitle: "開池、跟注、3-bet 與盲注防守", time: "25 分鐘", tags: ["翻前"], goal: "先建立可執行的開池範圍概念，避免用同一套牌在所有位置進池。", core: ["位置越晚，身後未行動玩家越少，開池範圍通常可以越寬；早位要更重視牌力與被 3-bet 後的可玩性。", "開池、跟注與 3-bet 不是只按牌力排序：也要看對手位置、尺寸、有效籌碼、盲注防守者與抽水。", "有位置的跟注較容易實現 equity；SB 沒位置且仍有 BB 在後面，需避免過多被動冷跟。", "先選一套適合常打桌型的基準範圍表，再按對手偏差調整；不要把單一 solver chart 當跨所有條件的固定答案。"], example: "CO 棄到你持 A♠8♠：BTN 與盲注都還在後面，但你的位置和同花可玩性好，通常比 UTG 用同一手牌開池更合理。具體頻率依開池尺寸與桌型查你的基準表。", check: "每個翻前動作都能回答：我在用價值、隔離弱範圍、阻止對手實現 equity，還是單純想看翻牌？" },
       { id: 3, title: "底池賠率、勝率與 EV", subtitle: "把跟注價格換成最低 equity", time: "20 分鐘", tags: ["數學"], goal: "計算跟注門檻，並知道 equity 只是決策輸入，不等於保證贏牌。", core: ["底池賠率最低勝率 = 跟注金額 ÷ 跟注後總底池。例：底池 100，對手下注 50，你跟 50；跟注後底池 200，門檻是 25%。", "EV 是所有可能結果按機率加權後的平均籌碼結果。正 EV 行動長期較好，但單次可能輸。", "要把自己的手牌放進對手可能範圍，而不是只和一手猜測的牌比。抽水、平局、被加注、後續街道與 equity realization 都可能改變簡化答案。", "outs 估算要扣掉會讓你仍輸的髒 outs；翻牌看到河牌的『乘 4』是粗略估算，不是精確 equity。"], example: "底池 100，對手下注 50，你面對 50 的跟注：最低攤牌 equity = 50 ÷ (100 + 50 + 50) = 25%。若估計對手範圍下你的 equity 為 28%，還需看抽水與未來街道是否能實現這個 equity。", check: "說出你的 equity 門檻、對手範圍，以及估計依據；不要只說『我有很多 outs』。" },
       { id: 4, title: "有效籌碼與 SPR", subtitle: "決定一對牌值多少街道", time: "20 分鐘", tags: ["翻後"], goal: "用 SPR 估計翻後剩餘籌碼與底池的比例，避免只因手牌看起來強就打光。", core: ["SPR = 翻牌開始時有效剩餘籌碼 ÷ 底池。SPR 低時較容易在一兩次下注內打光；SPR 高時需要更強的牌或更仔細的多街計畫。", "頂對強踢腳在低 SPR 通常更容易打大底池；高 SPR 面對大阻力時，牌力與對手範圍更關鍵。", "SPR 是規劃工具，不是自動跟注或棄牌規則。位置、牌面、對手和下注路線仍會改變決策。"], example: "翻牌底池 40bb、雙方剩 80bb，SPR=2。若你是單挑加注者、牌面乾燥且持頂對強踢腳，可較早規劃多街取值；若面對緊玩家在濕牌面加大壓力，仍要重估其範圍。", check: "翻牌前先問：若翻牌中牌，我願意用這手牌打幾街？SPR 是否讓我過度承諾？" },
-      { id: 5, title: "牌面、範圍與持續下注", subtitle: "看誰的整體範圍佔優", time: "25 分鐘", tags: ["翻後"], goal: "用整體範圍而非單手牌，選擇下注、過牌與下注尺寸。", core: ["範圍優勢表示一方整體牌力分布較強；堅果優勢表示一方擁有更多最強組合。兩者相關但不同。", "高牌、乾燥牌面常讓翻前加注者有範圍優勢；低張、連接、同花牌面可能更有利於盲注防守者。要按實際翻前範圍判斷。", "小尺寸可用於範圍優勢明顯、想讓弱牌付費或保護全範圍的牌面；濕牌面和強價值牌可能需要較大尺寸。", "持續下注前想好被跟注後的轉牌：哪些牌繼續價值下注、哪些牌適合放慢、哪些牌能形成有效 bluff。"], example: "BTN 開池、BB 跟注，翻牌 K♦7♣2♠：BTN 常有更多強 Kx 與超對，可考慮較小尺寸高頻下注；但若 BB 跟注範圍寬、翻牌或抽水環境特殊，頻率仍要調整。", check: "先講明你的範圍優勢在哪、對手有哪些兩對／暗三條，再決定下注頻率和尺寸。" },
-      { id: 6, title: "轉牌：延續、放慢或放棄", subtitle: "用計畫檢查第二次下注", time: "25 分鐘", tags: ["翻後"], goal: "辨認哪些轉牌改變範圍，讓你可以持續施壓或應該控池。", core: ["一張轉牌可能改善某方的堅果組合、完成聽牌、改變頂對踢腳價值，或只是空白牌。每張牌先問『改變了誰的範圍？』", "延續下注需要足夠的價值牌與可棄掉的對手牌；有 equity 的半詐唬比純空氣更有後備。", "被跟注後別自動再開火。檢查對手的跟注範圍有沒有變強、河牌有哪些可代表的價值牌。", "沒位置時多考慮過牌保護攤牌 equity；有位置時可以選擇延遲下注。"], example: "BTN 在 K-7-2 下注被 BB 跟，轉牌 8 同花補成第二種聽牌：若你的 A♠Q♠ 增加同花 equity，可比較半詐唬與免費看河牌的價值；不能只因翻牌下注過就機械式再下注。", check: "下注前寫下：比現在更好的牌會棄多少？較差牌會跟多少？哪些河牌我還要下注？" },
-      { id: 7, title: "河牌：價值下注與跟注", subtitle: "判斷較差牌會不會付錢", time: "25 分鐘", tags: ["河牌"], goal: "把價值下注、詐唬與抓詐唬分開計畫，不用『保護牌力』代替理由。", core: ["價值下注的核心問題：有多少較差牌會跟？若大多較好牌才跟，應考慮過牌或小尺寸。", "抓詐唬時比較對手的自然詐唬組合與價值組合，再看你的牌是否阻擋價值或解鎖詐唬。", "河牌無後續牌可抽，因此單純『保護』通常不成立；下注應以價值、詐唬或拒絕 equity 為清楚目的。", "底池賠率提供跟注門檻，但不能單獨證明跟注正確；必須估對手線路中的詐唬比例。"], example: "河牌底池 100，對手打 75，你跟 75：跟注後底池 250，門檻是 30%。問自己對手這條線至少有多少詐唬？若你的手牌擋住對手可能的失敗聽牌，抓詐唬可能更差。", check: "面對下注時能列出至少幾個合理價值組合和詐唬組合，再比較所需比例嗎？" },
-      { id: 8, title: "詐唬與對手調整", subtitle: "讓每條線都有可信故事", time: "25 分鐘", tags: ["範圍"], goal: "選擇有合理阻擋牌、足夠棄牌率或攤牌價值的詐唬，並針對對手偏差調整。", core: ["有效詐唬通常能讓更好的牌棄掉；理想候選牌往往攤牌價值少、阻擋對手跟注牌、又不阻擋對手棄牌牌。", "詐唬所需成功率可用風險 ÷（風險 + 可贏底池）估算，但實際 EV 還需納入被跟住時的 equity。", "對跟注過多的玩家減少低 equity 純詐唬，增加薄價值；對過度棄牌者可增加有阻擋牌的詐唬。觀察要有足夠樣本，別把一次攤牌當定論。", "對手尺寸、位置與路線都會改變其範圍；避免用『他可能在偷』當成完整理由。"], example: "河牌底池 100，下注 75 純詐唬：若被跟就輸，要讓對手棄牌超過 75 ÷ (100+75) ≈ 42.9% 才達到零 EV。若對手是明顯站站看型，這個詐唬通常不該執行。", check: "下注前說清楚：我代表哪些價值牌？目標是讓什麼更好牌棄？對手會棄掉多少？" },
-      { id: 9, title: "選桌、資金與情緒管理", subtitle: "讓好策略能長期執行", time: "15 分鐘", tags: ["實戰"], goal: "建立可持續的場次規則，避免把短期輸贏誤當牌技證據。", core: ["選桌和抽水會顯著影響期望值；選擇自己有資訊、能專注、對手弱點清楚的桌。", "為生活資金和撲克資金分帳；適合的 bankroll 緩衝取決於盲注、勝率不確定性、波動和個人承受能力，沒有一個數字適合所有人。", "事先訂好停桌條件，例如無法專注、情緒急著追回損失、或不再能解釋自己的決策。停桌不是追回輸掉籌碼的策略。", "追蹤長期樣本、盲注級別、時數與決策品質；單次結果不等於長期 EV。"], example: "連續輸兩個買入本身不證明要加注或降級。先依事先定好的資金與專注規則決定，再用牌局複盤分清壞運氣和策略漏洞。", check: "寫下進桌前的資金上限、停桌條件與本次要練的一個決策目標。" },
-      { id: 10, title: "建立每週複盤循環", subtitle: "用手牌資料決定下一個訓練題", time: "20 分鐘", tags: ["進階習慣"], goal: "把牌譜轉成可檢驗的假設，再用針對性題目反覆練習。", core: ["先記錄行動、尺寸、位置與籌碼，然後獨立寫下當時範圍假設；不要讓攤牌結果倒灌成理由。", "挑一個決策街道，列出候選動作、底池價格、對手範圍和主要不確定性。", "每週找出一個重複錯誤（例如盲注過度跟注、河牌薄價值下注不足），用 10–20 個相似情境練習。", "進階時才用 solver 驗證：對照輸入條件、看策略趨勢和敏感度，不要把一個輸出百分比背成脫離情境的答案。"], example: "複盤時隱藏對手底牌，先預測其範圍與你的最佳行動，再揭示結果。每週追蹤『我能否說清楚跟注門檻和範圍依據』，比只統計輸贏更有用。", check: "每次複盤留下『下一次可以測試的單一假設』，而不是『下次要打好一點』。" }
+      { id: 5, title: "位置優勢：IP 與 OOP", subtitle: "位置、資訊、範圍優勢與堅果優勢", time: "25 分鐘", tags: ["個人優先"], goal: "分清楚最後行動帶來的位置優勢，與某個牌面上誰的範圍或堅果牌更強。", core: ["IP 通常最後行動，能先看對手決定，再選下注、過牌或加注；這提升資訊與 equity realization，不代表每個牌面都對 IP 有利。", "範圍優勢是整體牌力分布較強；堅果優勢是最強牌組合較多。兩者不能互換。", "BTN 對 BB 的 K-7-2 彩虹面常有範圍優勢；8-7-6 連接面則可能讓 BB 有更多兩對、順子與強聽牌。", "先從翻前範圍判斷誰受益，再決定持續下注的頻率與尺寸；不要只因自己是加注者就下注。"], example: "BTN 開池、BB 跟注。A-7-2 彩虹面通常更適合 BTN 用小尺寸施壓；8-7-6 兩花面要先尊重 BB 的堅果組合，再決定下注或過牌。", check: "每個牌面先說：誰在 IP？誰有範圍優勢？誰有堅果優勢？再選動作。", reading: "《六人桌基礎》位置與翻牌前；《如何決策》位置章；《範圍之戰》組合數學與牌面分析。" },
+      { id: 6, title: "OOP 翻牌策略：過牌與防守", subtitle: "過牌不代表弱，建立 check-call 與 check-raise", time: "25 分鐘", tags: ["個人優先"], goal: "建立穩定的 OOP 過牌範圍，再根據 IP 的下注尺寸挑選跟注、加注或棄牌。", core: ["OOP 先行動，常用過牌把決策交給 IP；過牌範圍應保留強牌、中等攤牌牌與弱牌，避免一過牌就暴露牌力。", "面對小注、大注與不同牌面，延續範圍會不同；比較底池價格、你的 equity、對手可下注的價值與詐唬組合。", "check-raise 以強價值牌和有後備 equity 的半詐唬為主；不是每次被下注都要加注，也不是強牌都必須加注。", "是否 donk lead 要由牌面與範圍理由支持；不要為了『保護』而隨意領打。"], example: "BB 在 K-7-2 彩虹面對 BTN 小注，可以用部分 Kx、口袋對與後門牌延續；對大注則重新檢查組合與底池價格，而不是整個範圍一律跟注。", check: "能否列出你 OOP 的過牌價值牌、中等牌與半詐唬候選，並解釋各自如何回應下注？", reading: "《征服現場》翻後與不同籌碼深度；《哈靈頓在現金桌》翻後緊凶與多人底池。" },
+      { id: 7, title: "IP check-back：控池與延遲下注", subtitle: "對手過牌後，選下注或免費看下一張", time: "25 分鐘", tags: ["個人優先"], goal: "有理由地過牌，不因為害怕下注而漏掉價值，也不因有位置就自動下注。", core: ["check-back 是 IP 在對手過牌後選擇過牌；OOP 的動作叫 check。", "中等攤牌價值、想控池的牌與有免費牌價值的聽牌可考慮 check-back。", "強價值牌可向較差牌取值；需要保護或能讓更好牌棄掉的牌可下注。濕牌面上免費牌可能讓對手完成聽牌。", "翻牌 check-back 後，轉牌可延遲下注，但要看新牌怎麼改變雙方範圍與你想代表的價值牌。"], example: "BTN 持 6-6 在 9-6-2 彩虹面面對 BB 過牌，通常有價值下注與保護理由；若在 A-8-4 彩虹面持中等牌力，check-back 常能控池並保留攤牌價值。", check: "check-back 前回答：我保留了哪些攤牌價值？下注會得到哪些較差跟注？免費牌會傷害我多少？", reading: "《如何決策》翻牌後決策；《如何讀牌》讀牌核心與實戰。" },
+      { id: 8, title: "轉牌計畫：第二槍或放慢", subtitle: "辨認牌張如何改變範圍與多街計畫", time: "30 分鐘", tags: ["個人優先"], goal: "把轉牌分類並依位置、範圍和剩餘底池選擇下注、過牌或放棄。", core: ["轉牌前先重估：翻牌下注被跟後，對手範圍通常比起始範圍更強。", "把轉牌分成有利、不利與中性，檢查它是否帶來堅果牌、完成聽牌、改變 equity 或只是一張空白牌。", "第二槍要有價值牌、可棄牌或 equity 後備；先想較差牌是否會跟、較好牌是否會棄，以及被跟後哪些河牌繼續。", "OOP 的過牌可以保護攤牌價值並平衡範圍；IP 可延遲下注或免費實現 equity，但不能機械式停火。"], example: "BTN 在 K-7-2 下注被 BB 跟，轉牌 8 完成部分順子與同花聽牌。先看誰增加了兩對、順子與強聽牌，再決定第二槍，而不是因翻牌已下注就自動續打。", check: "挑 5 張不同轉牌，逐張說明有利方、價值下注牌、半詐唬牌、過牌牌與河牌計畫。", reading: "《如何決策》轉牌與多街決策；《範圍之戰》3-bet 底池與河牌章節。" },
+      { id: 9, title: "河牌：抓詐唬與下注頻率", subtitle: "底池賠率、價值／詐唬組合與阻擋牌", time: "30 分鐘", tags: ["個人優先"], goal: "計算 bluff-catcher 的最低勝率，並用對手範圍決定實際跟注，而非套用固定頻率。", core: ["對手在河牌下注 B 到底池 P，你跟 B 的最低勝率是 B ÷ (P + 2B)。半池下注需 25%，75% 池需 30%，滿池需 33.3%，兩倍池需 40%。", "最低勝率是單手跟注門檻；MDF 是整體範圍防守概念，不能把 MDF 當成『每種 bluff-catcher 都要跟幾成』。", "估計價值與詐唬組合：對手哪些錯失聽牌會下注？哪些價值牌走得到這條線？你的底牌會阻擋哪一邊？", "玩家池少詐唬時，應比理論基準棄更多；對過度詐唬者可多跟。不要只憑一次攤牌下結論。"], example: "河牌底池 100，對手下注 75，你要跟 75：門檻為 75 ÷ (100+75+75) = 30%。接著估對手下注範圍裡的詐唬比例；有 30% equity 才達到忽略抽水的簡化門檻。", check: "先算門檻，再列價值／詐唬組合，最後檢查 blocker 與對手傾向；不要先決定跟注再找理由。", reading: "《範圍之戰》河牌與組合；《藍皮書》下注尺度與思維層次；《高級玩家》河牌與超池下注。" },
+      { id: 10, title: "複盤循環與實戰管理", subtitle: "把 100bb 弱點練穩，再進入 200bb", time: "25 分鐘", tags: ["整合"], goal: "用結果盲複盤確認技能，再有條件地延伸到深籌碼。", core: ["每週複盤 5–10 手；先記位置、有效籌碼、尺寸與範圍假設，再揭示攤牌結果。", "每手標記 IP/OOP、翻牌過牌理由、check-back 理由、轉牌分類與河牌跟注門檻。", "開始 200bb 主線前，完成至少 20 手 100bb 複盤並能說清楚多街計畫；這是訓練門檻，不代表已證明長期勝率。", "把生活資金與撲克資金分開，設定停桌條件；短期輸贏不能單獨證明決策好壞。"], example: "每週挑 2 手 OOP、2 手 IP check-back、3 手轉牌、3 手河牌抓詐唬。把重複錯誤做成 10 個相似情境，下週再測一次。", check: "你的複盤紀錄是否能回答：下一次遇到同類牌面，我會因哪個可驗證理由改變行動？", reading: "《職業牌手訓練指南》訓練習慣；進入 200bb 前閱讀《哈靈頓在現金桌》的深籌碼章節。" }
     ];
 
     const questions = [
@@ -309,11 +356,19 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       { topic: "底池賠率", module: 3, title: "底池 100，對手下注 50，你跟 50。忽略抽水，最低需要多少攤牌勝率？", context: "假設這是河牌，不會再有後續下注。", choices: ["20%", "25%", "33%", "不確定。"], answer: 1, explain: "跟注後底池為 200，投入 50，所以門檻是 50/200 = 25%。" },
       { topic: "SPR", module: 4, title: "翻牌底池 20bb，雙方有效剩餘 100bb。SPR 約為 5，這主要告訴你什麼？", context: "", choices: ["任何頂對都必須打光。", "後續籌碼相對底池偏深，應在翻牌前後規劃多街，不能只看一對牌力。", "對手一定有暗三條。", "不確定。"], answer: 1, explain: "SPR=100/20=5。它幫助規劃底池與剩餘籌碼比例，不直接決定某手牌必須跟或棄。" },
       { topic: "範圍與牌面", module: 5, title: "BTN 開池、BB 跟注，翻牌 K-7-2 彩虹。合理的第一步是什麼？", context: "", choices: ["自動大注，因為翻前加注者永遠佔優。", "比較雙方翻前範圍如何命中這個牌面，再選下注頻率和尺寸。", "無論手牌都過牌，因為 BB 有位置。", "不確定。"], answer: 1, explain: "翻前加注者常在這類高牌乾燥面有範圍優勢，但仍要從實際範圍和目標推導策略。" },
-      { topic: "轉牌規劃", module: 6, title: "翻牌下注被跟後，轉牌前最值得先確認哪件事？", context: "", choices: ["不管轉牌是什麼都再下注，維持主動。", "這張牌如何改變雙方範圍、我想讓哪些牌跟或棄，以及哪些河牌會繼續。", "只看自己的牌有沒有變成一對。", "不確定。"], answer: 1, explain: "第二槍需要轉牌和範圍支持，還要先想好河牌計畫。" },
-      { topic: "河牌價值", module: 7, title: "河牌考慮薄價值下注時，最核心的問題是什麼？", context: "", choices: ["有沒有較差牌會跟我的下注？", "我的牌是不是看起來很強？", "下注能不能阻止對手抽牌？", "不確定。"], answer: 0, explain: "河牌沒有未來抽牌；價值下注主要靠較差牌跟注。" },
-      { topic: "詐唬與範圍", module: 8, title: "選純河牌詐唬時，哪類手牌通常更適合作候選？", context: "假設兩手牌攤牌價值都低，下注線也有可信價值牌。", choices: ["阻擋對手可能跟注的強牌，且保留對手可能棄牌組合的牌。", "阻擋對手會棄掉的牌，卻不阻擋跟注牌的牌。", "任何最差手牌，完全不看阻擋牌與牌面。", "不確定。"], answer: 0, explain: "好 bluff blocker 會減少對手持有跟注牌的組合，同時盡量保留可棄牌。" },
+      { topic: "轉牌規劃", module: 8, title: "翻牌下注被跟後，轉牌前最值得先確認哪件事？", context: "", choices: ["不管轉牌是什麼都再下注，維持主動。", "這張牌如何改變雙方範圍、我想讓哪些牌跟或棄，以及哪些河牌會繼續。", "只看自己的牌有沒有變成一對。", "不確定。"], answer: 1, explain: "第二槍需要轉牌和範圍支持，還要先想好河牌計畫。" },
+      { topic: "河牌價值", module: 9, title: "河牌考慮薄價值下注時，最核心的問題是什麼？", context: "", choices: ["有沒有較差牌會跟我的下注？", "我的牌是不是看起來很強？", "下注能不能阻止對手抽牌？", "不確定。"], answer: 0, explain: "河牌沒有未來抽牌；價值下注主要靠較差牌跟注。" },
+      { topic: "抓詐唬門檻", module: 9, title: "河牌底池 100，對手下注 75。忽略抽水，你跟注至少需要多少勝率？", context: "", choices: ["25%", "30%", "33.3%", "不確定。"], answer: 1, explain: "跟注 75，跟注後總底池為 250，門檻為 75/250 = 30%。這只是最低勝率，還要估對手範圍。" },
+      { topic: "詐唬與範圍", module: 9, title: "選純河牌詐唬時，哪類手牌通常更適合作候選？", context: "假設兩手牌攤牌價值都低，下注線也有可信價值牌。", choices: ["阻擋對手可能跟注的強牌，且保留對手可能棄牌組合的牌。", "阻擋對手會棄掉的牌，卻不阻擋跟注牌的牌。", "任何最差手牌，完全不看阻擋牌與牌面。", "不確定。"], answer: 0, explain: "好 bluff blocker 會減少對手持有跟注牌的組合，同時盡量保留可棄牌。" },
       { topic: "複盤與結果", module: 10, title: "哪一種複盤方式比較能避免結果偏誤？", context: "", choices: ["贏的牌都照原打法重複，輸的牌都改掉。", "先隱藏對手底牌，記下當時資訊、範圍假設和候選動作，再揭示結果。", "只看一天的輸贏判斷自己的勝率。", "不確定。"], answer: 1, explain: "先按決策當時可知的資訊推理，再看攤牌，能減少結果偏誤。" }
     ];
+
+    const moduleReadings = {
+      1: "《六人桌基礎》資金、位置與數據定義；《哈靈頓在現金桌》基本概念。",
+      2: "《小額無限德州理論》整體框架與翻前；《六人桌基礎》起手牌與盲注防守。",
+      3: "《數學那些事》賠率、outs 與期望值；《小額無限德州理論》決策案例。",
+      4: "《六人桌基礎》不同籌碼深度；《高級概念》SPR 章節。"
+    };
 
     const handFields = {
       GAME:"hand-game", BLINDS:"hand-blinds", EFFECTIVE_BB:"hand-effective", HERO_POSITION:"hand-hero-position",
@@ -413,10 +468,25 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       document.getElementById("hand-file").addEventListener("change",event=>loadHandNote(event.target.files?.[0]));
     }
 
-    const stateKey = "cashStudyPath.v1";
+    const stateKey = "cashStudyPath.v2";
     let state = loadState();
     function loadState() {
-      try { return JSON.parse(localStorage.getItem(stateKey)) || { completed: [], answers: null, notes: "" }; }
+      try {
+        const current = JSON.parse(localStorage.getItem(stateKey));
+        if (current) return current;
+        const old = JSON.parse(localStorage.getItem("cashStudyPath.v1"));
+        if (!old) return { completed: [], answers: null, notes: "" };
+        const completionMap = {1:1,2:2,3:3,4:4,5:5,6:8,7:9,8:9,9:10,10:10};
+        const completed = [...new Set((old.completed || []).map(id => completionMap[id]).filter(Boolean))];
+        const answers = Array.isArray(old.answers) && old.answers.length === questions.length ? old.answers : null;
+        const scores = {};
+        let totalScore = null;
+        if (answers) {
+          questions.forEach((q, qi) => { scores[q.module] = (scores[q.module] || 0) + (answers[qi] === q.answer ? 1 : 0); });
+          totalScore = questions.reduce((n,q,qi)=>n+(answers[qi]===q.answer?1:0),0);
+        }
+        return { completed, answers, scores: answers ? scores : null, totalScore, notes: old.notes || "" };
+      }
       catch { return { completed: [], answers: null, notes: "" }; }
     }
     function saveState() { localStorage.setItem(stateKey, JSON.stringify(state)); }
@@ -436,6 +506,7 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
             <h3>核心觀念</h3><ul>${module.core.map(item => `<li>${item}</li>`).join("")}</ul>
             <div class="example"><strong>情境演練：</strong>${module.example}</div>
             <h3>自我檢查</h3><p>${module.check}</p>
+            ${(module.reading || moduleReadings[module.id]) ? `<p class="module-reading"><strong>對應教材：</strong>${module.reading || moduleReadings[module.id]}</p>` : ""}
             <div>${module.tags.map(tag => `<span class="rule">${tag}</span>`).join("")}</div>
             <p><button class="done-check" type="button" data-complete="${module.id}" aria-pressed="${done}">${done ? "✓ 已完成" : "標記完成"}</button></p>
           </div>
@@ -443,13 +514,15 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       }).join("");
       updateProgress();
     }
+    const personalRoute = [5,6,7,8,9,1,2,3,4,10];
     function getOrder() {
-      if (!state.scores) return [...modules];
+      if (!state.scores || state.totalScore >= 7) return personalRoute.map(id => modules.find(module => module.id === id));
       const scoreMap = state.scores;
+      const routeRank = new Map(personalRoute.map((id,index) => [id,index]));
       return [...modules].sort((a,b) => {
         const aScored = Object.hasOwn(scoreMap, a.id), bScored = Object.hasOwn(scoreMap, b.id);
         if (aScored !== bScored) return aScored ? -1 : 1;
-        return (scoreMap[a.id] ?? 0) - (scoreMap[b.id] ?? 0) || a.id-b.id;
+        return (scoreMap[a.id] ?? 0) - (scoreMap[b.id] ?? 0) || routeRank.get(a.id)-routeRank.get(b.id);
       });
     }
     function updateProgress() {
@@ -458,10 +531,10 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
       document.getElementById("progress-fill").style.width = `${count / modules.length * 100}%`;
       if (state.scores) {
         const weakest = getOrder()[0];
-        document.getElementById("progress-copy").textContent = "已完成診斷。依主題弱點調整了課程順序，完成單元後更新進度。";
+        document.getElementById("progress-copy").textContent = state.totalScore >= 7 ? `診斷 ${state.totalScore}/${questions.length}。先依你回報的翻後弱點練習，再回頭複習基礎。` : "已完成診斷。先補答錯主題，再練習你自評較弱的翻後單元。";
         document.getElementById("next-title").textContent = `先練：${weakest.title}`;
         document.getElementById("next-copy").textContent = `依診斷結果，${weakest.subtitle} 是目前較值得優先補強的主題。`;
-        document.querySelector("#path-note").innerHTML = `<strong>依診斷排序：</strong>先處理答錯較多的主題，再回到其他模組。答題反映概念熟悉度，不足以單獨證明你在牌桌上的長期執行能力。`;
+        document.querySelector("#path-note").innerHTML = state.totalScore >= 7 ? `<strong>你的優先順序：</strong>依自評從 IP/OOP 位置優勢開始，再練 OOP 過牌、IP check-back、轉牌與河牌。這 8 題沒有直接測 OOP 或 check-back 執行，請以牌例複盤檢驗。` : `<strong>依診斷排序：</strong>先處理答錯較多的主題，再回到自評弱點與其他模組。答題反映概念熟悉度，不足以單獨證明牌桌執行能力。`;
         document.getElementById("progress-label").textContent = "課程完成度";
       }
     }
@@ -477,7 +550,7 @@ QUESTION=這個跟注需要比較哪些範圍？</pre></div>
     function showResult(scores, total) {
       const result = document.getElementById("quiz-result");
       const band = total <= 3 ? "打底階段" : total <= 6 ? "建立連結階段" : "整合練習階段";
-      const summary = total <= 3 ? "先按順序補翻前、底池價格和 SPR，再進入多街策略。" : total <= 6 ? "先做答錯主題，再用翻牌後與河牌情境把數學連到範圍。" : "概念測驗表現不錯；優先做實戰複盤、反例題與條件變化，確認能穩定執行。";
+      const summary = total <= 3 ? "先按順序補翻前、底池價格和 SPR，再進入多街策略。" : total <= 6 ? "先做答錯主題，再用翻牌後與河牌情境把數學連到範圍。" : "概念題表現不錯。依你的自評，接著集中練 IP/OOP、過牌、轉牌與抓詐唬；本測驗不直接檢查這些動作的實戰執行。";
       const ranking = Object.entries(scores).map(([id, score]) => ({module: modules.find(m=>m.id===Number(id)), score})).sort((a,b)=>a.score-b.score).slice(0,4);
       result.innerHTML = `<h3>診斷：${band} · ${total} / ${questions.length}</h3><p>${summary}</p>
         <div class="dimension-grid">${ranking.map(item=>`<div class="dimension"><strong>${item.score ? "已答對" : "優先補強"} · 單元 ${item.module.id}</strong>${item.module.title}</div>`).join("")}</div>
